@@ -9,7 +9,9 @@ module.exports = (sequelize, Sequelize) => {
             },
             userId: {
                 type: Sequelize.INTEGER,
-                field: 'user_id'
+                field: 'user_id',
+                required: true ,
+                allowNull: false
             },
             income: {
                 type: Sequelize.INTEGER,

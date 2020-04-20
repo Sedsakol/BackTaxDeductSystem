@@ -22,4 +22,10 @@ db.user_information = require('../model/user_information.js')(sequelize, Sequeli
 db.user_status = require('../model/user_status.js')(sequelize, Sequelize);
 db.user_type = require('../model/user_type.js')(sequelize, Sequelize);
 
+//associations
+
+db.user_information.hasMany(db.user_status, { foreignKey: 'userId' ,tragetkey: 'userId'});
+db.user_information.belongsTo(db.user_type, { foreignKey: 'userId' ,tragetkey: 'userId'});
+
+
 module.exports = db;

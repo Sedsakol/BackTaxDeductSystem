@@ -15,7 +15,7 @@ sequelize
   });
 
 //ใช้เมื่อมีการแก้ไขใน database ใหม่
-// db.sequelize.sync(); 
+//db.sequelize.sync(); 
 
 
 const userInformation = db.user_information;

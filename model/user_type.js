@@ -6,6 +6,7 @@ module.exports = (sequelize, Sequelize) => {
                 type: Sequelize.INTEGER,
                 field: 'user_id',
                 primaryKey: true
+                
             },
             usertype: {
                 type: Sequelize.INTEGER,
@@ -29,5 +30,8 @@ module.exports = (sequelize, Sequelize) => {
             freezeTableName: true
         }
     );
+
+
+    
     return user_type;
 };
