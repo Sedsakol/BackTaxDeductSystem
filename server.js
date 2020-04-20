@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // simple route
 app.get("/", (req, res) => {
-    console.log(' "Welcome to tax deduct system."');
+    res.json("Welcome to tax deduct system.");
 });
 
 //add router
@@ -32,4 +32,3 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
-

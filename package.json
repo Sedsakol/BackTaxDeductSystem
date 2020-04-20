@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www"
+    "start": "npm install & start http://localhost:8080/ & node server.js",
+    "dev": "npm install & start http://localhost:8080/ & nodemon server.js "
   },
   "repository": {
     "type": "git",
