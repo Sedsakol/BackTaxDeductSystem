@@ -14,7 +14,7 @@ module.exports = (sequelize, Sequelize) => {
                 allowNull: false
             },
             income: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.DOUBLE,
                 field: 'income'
             },
             maritalStatus: {
@@ -30,31 +30,31 @@ module.exports = (sequelize, Sequelize) => {
                 field: 'parent'
             },
             buildHouseInterest: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.DOUBLE,
                 field: 'build_house_interest'
             },
             lifeInsurance: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.DOUBLE,
                 field: 'life_insurance'
             },
             pensionInsurance: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.DOUBLE,
                 field: 'pension _insurance'
             },
             RMF: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.DOUBLE,
                 field: 'rmf'
             },
             SSF: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.DOUBLE,
                 field: 'ssf'
             },
             donate: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.DOUBLE,
                 field: 'donate'
             },
             providentFund: {
-                type: Sequelize.INTEGER,
+                type: Sequelize.DOUBLE,
                 field: 'provident_fund'
             },
         },
