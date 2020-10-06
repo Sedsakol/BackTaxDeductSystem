@@ -1,29 +1,21 @@
 {
-  "name": "tax-deduct-system",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "backtaxdeductsystem",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "npm install & start http://localhost:8080/ & node server.js",
-    "dev": "npm install & start http://localhost:8080/ & nodemon server.js "
+    "dev": "nodemon ./bin/www",
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Sedsakol/tax-deduct-system.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Sedsakol/tax-deduct-system/issues"
-  },
-  "homepage": "https://github.com/Sedsakol/tax-deduct-system#readme",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "mysql2": "^2.1.0",
-    "sequelize": "^5.21.6"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "morgan": "~1.9.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "sequelize-cli": "^6.2.0"
   }
 }
