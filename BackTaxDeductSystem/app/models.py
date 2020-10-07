@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin , Group
+from django.utils import timezone
 # Create your models here.
 
 
@@ -56,17 +57,6 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class MemberUser(User):
-
-    class Meta:
-        proxy = True
-
-class AdminUser(User):
-
-    class Meta:
-        proxy = True
-
-
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name='email address', max_length=255, unique=True)
     first_name = models.CharField(max_length=250, null=True, blank=True)
@@ -86,11 +76,24 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     active = models.BooleanField(default=True)
 
+    group = models.ManyToManyField(Group, blank=True, related_name='user_groups')
+    
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
 
+class MemberUser(User):
+
+    class Meta:
+        proxy = True
+
+class AdminUser(User):
+
+    class Meta:
+        proxy = True
+        
 class member_profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     gender = models.CharField(max_length=250, null=True)
@@ -102,5 +105,46 @@ class member_profile(models.Model):
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     infirm = models.IntegerField(null=True,blank=True)
     facebook_id = models.IntegerField(null=True,blank=True)
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
-    
+
+#stair
+class stair_step(models.Model):
+    step = models.IntegerField(unique=True)
+    max_money = models.IntegerField()
+    rate = models.FloatField()
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
+
+#fund
+class fund_type(models.Model):
+    name = models.CharField(max_length=250)
+    description = models.CharField(max_length=250 ,null=True ,blank=True)
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
+class fund_list(models.Model):
+    name = models.CharField(max_length=250)
+    description = models.CharField(max_length=250)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    link = models.CharField(max_length=250)
+    risk = models.IntegerField()
+    fundType = models.ForeignKey(fund_type, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
+
+#insurance
+class insurance_list(models.Model):
+    name = models.CharField(max_length=250)
+    description = models.CharField(max_length=250)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    link = models.CharField(max_length=250)
+    active = models.BooleanField(default=True)
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+
