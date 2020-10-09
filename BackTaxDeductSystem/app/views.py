@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 #รอปรับแก้เป็นดึงจาก DB
 def cal_tax_stair(salary,other_income):
-    money = salary * 12 + other_income - 160000
+    money = money - 160000
     stair_list = [150000,300000,500000,750000,1000000,2000000,5000000]
     rate = [5,5,10,15,20,25,30,35]
     max_money = []
@@ -26,4 +26,3 @@ def cal_tax_stair(salary,other_income):
         money -= stair_list[current_stair-1]
         tax = rate[current_stair]/100 * money + dis_money[current_stair-1]
         return tax
-    
