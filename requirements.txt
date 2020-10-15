@@ -1,1 +1,7 @@
 Django==3.1.2
+djangorestframework
+djangorestframework-jwt
+markdown
+django-filter
+django-cors-headers
+django-allauth

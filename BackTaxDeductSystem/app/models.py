@@ -17,6 +17,8 @@ class UserManager(BaseUserManager):
             email=self.normalize_email(email),
         )
         user.set_password(password)
+
+
         user.save(using=self._db)
 
         return user
@@ -27,10 +29,7 @@ class UserManager(BaseUserManager):
             email,
             password=password,
         )
-        user.bemember = True
-
-        profile = member(user=user)
-        profile.save()
+        member_profile.objects.create(user=user)
         user.save(using=self._db)
         return user
     
@@ -40,7 +39,6 @@ class UserManager(BaseUserManager):
             email,
             password=password,
         )
-        medpoint_admin.objects.create(user=user)
         user.admin = True
         user.save(using=self._db)
         return user
@@ -51,7 +49,6 @@ class UserManager(BaseUserManager):
             email,
             password=password,
         )
-        medpoint_admin.objects.create(user=user)
         user.admin = True
         user.staff = True
         user.save(using=self._db)
@@ -83,6 +80,62 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+    def get_full_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def get_short_name(self):
+        return self.email
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        return self.staff
+
+    @property
+    def is_admin(self):
+        "Is the user a admin member?"
+        return self.admin
+
+    @property
+    def is_active(self):
+        "Is the user active?"
+        return self.active
+
+    @property
+    def is_superpartner(self):
+        "Is the user superpartner?"
+        return self.superpartner
+
+    @property
+    def is_member(self):
+        "Is the user member?"
+        return self.bemember
+
+    @property
+    def is_partner(self):
+        "Is the user active?"
+        return self.bepartner
+
+    @property
+    def is_seller(self):
+        "Is the user active?"
+        return self.seller
+    
 
 class MemberUser(User):
 
