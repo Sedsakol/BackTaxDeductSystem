@@ -149,8 +149,8 @@ class AdminUser(User):
         
 class member_profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    gender = models.CharField(max_length=250, null=True)
-    birthdate = models.DateField()
+    gender = models.CharField(max_length=250, null=True,blank=True)
+    birthdate = models.DateField(null=True,blank=True)
     salary = models.IntegerField(null=True,blank=True)
     other_income = models.IntegerField(null=True,blank=True)
     parent_num = models.IntegerField(null=True,blank=True)
