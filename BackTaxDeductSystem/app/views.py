@@ -1,4 +1,13 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import permissions
+from django.views import View
+import json
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import get_user_model
+from .models import member_profile,User
 
 # Create your views here.
 
@@ -26,3 +35,23 @@ def cal_tax_stair(salary,other_income):
         money -= stair_list[current_stair-1]
         tax = rate[current_stair]/100 * money + dis_money[current_stair-1]
         return tax
+
+@method_decorator(csrf_exempt, name='dispatch')
+class user_register(View):
+    def get(self, request, *args, **kwargs):
+        return JsonResponse({'status':'403','msg':'Forbidden'})
+
+    def post(self, request, *args, **kwargs):
+        content = json.loads(request.body)
+        if "username" in content and "password" in content :
+            email_list = User.objects.all().values_list('email', flat=True)
+            if content["username"] not in email_list:
+                user = User.objects.create_member(email=content["username"],password=content["password"])
+                user.save()
+                return JsonResponse({'status':'200','msg':'created user'})
+            else:
+                return JsonResponse({'status':'200','msg':'email is already'})
+        else:
+            return JsonResponse({'status':'200','msg':'field not complete'})
+
+   

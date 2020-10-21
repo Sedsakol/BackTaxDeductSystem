@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from django.contrib.auth import get_user_model
 from allauth.account import app_settings as allauth_settings
 from allauth.utils import (email_address_exists, get_username_max_length)
 from allauth.account.adapter import get_adapter
@@ -13,8 +13,7 @@ User = get_user_model()
 
 class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
-    password1 = serializers.CharField(write_only=True)
-    password2 = serializers.CharField(write_only=True)
+    password= serializers.CharField(write_only=True)
 
     def validate_email(self, email):
         if email and email_address_exists(email):
@@ -25,11 +24,6 @@ class RegisterSerializer(serializers.Serializer):
     def validate_password1(self, password):
         return get_adapter().clean_password(password)
 
-    def validate(self, data):
-        if data['password1'] != data['password2']:
-            raise serializers.ValidationError(
-                _("The two password fields didn't match."))
-        return data
 
     def get_cleaned_data(self):
         return {
