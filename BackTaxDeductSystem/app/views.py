@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import ListAPIView
 from rest_framework import permissions
 from django.views import View
 import json
@@ -10,7 +11,6 @@ from django.contrib.auth import get_user_model
 from .models import member_profile,User
 
 # Create your views here.
-
 #รอปรับแก้เป็นดึงจาก DB
 def cal_tax_stair(salary,other_income):
     money = money - 160000
@@ -43,6 +43,7 @@ class user_register(View):
 
     def post(self, request, *args, **kwargs):
         content = json.loads(request.body)
+        print(content)
         if "username" in content and "password" in content :
             email_list = User.objects.all().values_list('email', flat=True)
             if content["username"] not in email_list:
@@ -54,4 +55,3 @@ class user_register(View):
         else:
             return JsonResponse({'status':'200','msg':'field not complete'})
 
-   

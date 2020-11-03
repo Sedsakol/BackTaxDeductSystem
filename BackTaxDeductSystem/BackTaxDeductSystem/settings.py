@@ -27,7 +27,7 @@ SECRET_KEY = 'w1*eww-u*ua2m3u$wak6w-oe5&ks($z+&w@twe-&7j3rum)!ne'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','161.246.5.140']
 
 
 # Application definition
@@ -48,12 +48,11 @@ INSTALLED_APPS = [
     
 ]
 
+
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
@@ -71,9 +70,15 @@ JWT_AUTH = {
 }
 
 CORS_ORIGIN_WHITELIST = (
-    'http://:localhost:8080',
+    'http://:localhost:8000',
+    'http://:localhost:80',
     'http://:localhost',
+    'http://:161.246.5.140:8000',
+    'http://:161.246.5.140:80',
+    'http://:161.246.5.140',
 )
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
