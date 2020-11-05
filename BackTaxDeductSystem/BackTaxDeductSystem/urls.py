@@ -23,5 +23,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('auth/obtain_token/', obtain_jwt_token),
     path('auth/refresh_token/', refresh_jwt_token),
-    path('register/',views.user_register.as_view())
+    path('register/',views.user_register.as_view()),
+    path('get_profile',views.user_profile.as_view())
 ]

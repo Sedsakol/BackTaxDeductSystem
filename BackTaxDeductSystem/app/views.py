@@ -55,3 +55,11 @@ class user_register(View):
         else:
             return JsonResponse({'status':'200','msg':'field not complete'})
 
+
+@method_decorator(csrf_exempt, name='dispatch')
+class user_profile(View):
+    def get(self, request, *args, **kwargs):
+        username = request.user.username
+        print('test')
+        print(username)
+        return JsonResponse({'status':'403','msg':'Forbidden'})
