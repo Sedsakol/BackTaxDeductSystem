@@ -12,7 +12,7 @@ from .models import member_profile,User
 
 # Create your views here.
 #รอปรับแก้เป็นดึงจาก DB
-def cal_tax_stair(salary,other_income):
+def cal_tax_stair(money):
     money = money - 160000
     stair_list = [150000,300000,500000,750000,1000000,2000000,5000000]
     rate = [5,5,10,15,20,25,30,35]
@@ -59,7 +59,13 @@ class user_register(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class user_profile(View):
     def get(self, request, *args, **kwargs):
-        username = request.user.username
-        print('test')
+        username = request.user
         print(username)
-        return JsonResponse({'status':'403','msg':'Forbidden'})
+        print(request)
+        return JsonResponse({'status':'403','msg':'get'})
+
+    def post(self, request, *args, **kwargs):
+        username = request.user
+        print(username)
+        print(request)
+        return JsonResponse({'status':'403','msg':'post'})
