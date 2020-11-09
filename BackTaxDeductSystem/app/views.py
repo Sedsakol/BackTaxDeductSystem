@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
 from rest_framework import permissions
 from django.views import View
@@ -9,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
 from .models import member_profile,User
+import jwt
 
 # Create your views here.
 #รอปรับแก้เป็นดึงจาก DB
@@ -49,23 +51,52 @@ class user_register(View):
             if content["username"] not in email_list:
                 user = User.objects.create_member(email=content["username"],password=content["password"])
                 user.save()
-                return JsonResponse({'status':'200','msg':'created user'})
+                return JsonResponse({'msg':'created user'})
             else:
-                return JsonResponse({'status':'200','msg':'email is already'})
+                return JsonResponse({'msg':'email is already'})
         else:
-            return JsonResponse({'status':'200','msg':'field not complete'})
+            return JsonResponse({'msg':'field not complete'})
 
 
 @method_decorator(csrf_exempt, name='dispatch')
 class user_profile(View):
+    permission_classes = (IsAuthenticated,)
     def get(self, request, *args, **kwargs):
-        username = request.user
-        print(username)
-        print(request)
-        return JsonResponse({'status':'403','msg':'get'})
+        token = request.META['HTTP_AUTHORIZATION']
+        decodedPayload = jwt.decode(token,None,None)
+        print(decodedPayload)
+        email = decodedPayload.get('email')
+        u = User.objects.get(email = email)
+        m_p = member_profile.objects.get(user = u)
+        
+        return JsonResponse({'email': u.email,
+        'gender': m_p.gender,
+        'birthdate' : m_p.birthdate,
+        'salary' : m_p.salary,
+        'other_income': m_p.other_income,
+        'parent_num': m_p.parent_num,
+        'child_num' : m_p.child_num,
+        'infirm' : m_p.infirm,
+        'risk' : m_p.risk,
+        'facebook_id' : m_p.facebook_id
+        })
 
     def post(self, request, *args, **kwargs):
-        username = request.user
-        print(username)
-        print(request)
-        return JsonResponse({'status':'403','msg':'post'})
+        token = request.META['HTTP_AUTHORIZATION']
+        decodedPayload = jwt.decode(token,None,None)
+        print(decodedPayload)
+        email = decodedPayload.get('email')
+        u = User.objects.get(email = email)
+        m_p = member_profile.objects.get(user = u)
+
+        return JsonResponse({'email': u.email,
+        'gender': m_p.gender,
+        'birthdate' : m_p.birthdate,
+        'salary' : m_p.salary,
+        'other_income': m_p.other_income,
+        'parent_num': m_p.parent_num,
+        'child_num' : m_p.child_num,
+        'infirm' : m_p.infirm,
+        'risk' : m_p.risk,
+        'facebook_id' : m_p.facebook_id
+        })
