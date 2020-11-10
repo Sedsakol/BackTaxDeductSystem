@@ -9,15 +9,23 @@ import json
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from .models import member_profile,User
+from .models import member_profile,User,stair_step
 import jwt
 
 # Create your views here.
 #รอปรับแก้เป็นดึงจาก DB
 def cal_tax_stair(money):
+    s_s = stair_step.objects.all()
+    if len(s_s) == 0:
+        stair_list = [150000,300000,500000,750000,1000000,2000000,5000000]
+        rate = [5,5,10,15,20,25,30,35]
+    else:
+        stair_list = []
+        rate = []
+        for s in range(0,len(s_s)):
+            stair_list.append(s.max_money)
+            rate.append(s.rate)
     money = money - 160000
-    stair_list = [150000,300000,500000,750000,1000000,2000000,5000000]
-    rate = [5,5,10,15,20,25,30,35]
     max_money = []
     dis_money = []
     current_stair = 0
