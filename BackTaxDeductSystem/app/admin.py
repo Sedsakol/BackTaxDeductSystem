@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User
+from .models import User,member_profile,stair_step,fund_type,fund_list,insurance_list,insurance_type
 from django.contrib.auth import get_user_model
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -82,3 +82,39 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 admin.site.register(User, UserAdmin)
+
+class member_profileAdmin(admin.ModelAdmin):
+    list_display = ('created','last_updated','user','gender','birthdate','salary','other_income','marriage','parent_num','child_num','infirm','facebook_id','risk')
+    ordering = ('id',)
+
+admin.site.register(member_profile,member_profileAdmin)
+
+class stair_stepAdmin(admin.ModelAdmin):
+    list_display = ('created','last_updated','step','max_money','rate')
+    ordering = ('id',)
+
+admin.site.register(stair_step,stair_stepAdmin)
+
+class fund_typeAdmin(admin.ModelAdmin):
+    list_display = ('created','last_updated','name','description')
+    ordering = ('id',)
+
+admin.site.register(fund_type,fund_typeAdmin)
+
+class fund_listAdmin(admin.ModelAdmin):
+    list_display = ('created','last_updated','name','description','start_date','end_date','link','risk','fundType','active')
+    ordering = ('id',)
+
+admin.site.register(fund_list,fund_listAdmin)
+
+class insurance_typeAdmin(admin.ModelAdmin):
+    list_display = ('created','last_updated','name','description')
+    ordering = ('id',)
+
+admin.site.register(insurance_type,insurance_typeAdmin)
+class insurance_listAdmin(admin.ModelAdmin):
+    list_display = ('created','last_updated','name','description','start_date','end_date','link','active')
+    ordering = ('id',)
+
+admin.site.register(insurance_list,insurance_listAdmin)
+

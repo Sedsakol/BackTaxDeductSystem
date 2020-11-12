@@ -155,6 +155,7 @@ class member_profile(models.Model):
     other_income = models.IntegerField(null=True,blank=True)
     parent_num = models.IntegerField(null=True,blank=True)
     child_num = models.IntegerField(null=True,blank=True)
+    marriage = models.IntegerField(null=True,blank=True)
     infirm = models.IntegerField(null=True,blank=True)
     facebook_id = models.IntegerField(null=True,blank=True)
     risk = models.IntegerField(null=True,blank=True)
@@ -191,6 +192,12 @@ class fund_list(models.Model):
 
 
 #insurance
+class insurance_type(models.Model):
+    name = models.CharField(max_length=250)
+    description = models.CharField(max_length=250 ,null=True ,blank=True)
+    last_updated = models.DateTimeField(auto_now=True, editable=False)
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    
 class insurance_list(models.Model):
     name = models.CharField(max_length=250)
     description = models.CharField(max_length=250)

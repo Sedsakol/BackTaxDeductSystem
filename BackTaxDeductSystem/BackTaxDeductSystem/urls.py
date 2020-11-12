@@ -24,5 +24,6 @@ urlpatterns = [
     path('auth/obtain_token/', obtain_jwt_token),
     path('auth/refresh_token/', refresh_jwt_token),
     path('register/',views.user_register.as_view()),
-    path('profile/',views.user_profile.as_view())
+    path('profile/',views.user_profile.as_view()),
+    path('tax/',views.cal_tax.as_view())
 ]
