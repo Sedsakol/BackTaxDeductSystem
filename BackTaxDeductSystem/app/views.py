@@ -15,7 +15,6 @@ import jwt
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
 class cal_tax(View):
-    permission_classes = (IsAuthenticated,)
     def cal_tax_stair(self,money):
         s_s = stair_step.objects.all()
         if len(s_s) == 0:
@@ -52,8 +51,8 @@ class cal_tax(View):
         return JsonResponse({'status':'403','msg':'Forbidden'})
 
     def post(self, request, *args, **kwargs):
-        token = request.META['HTTP_AUTHORIZATION']
-        decodedPayload = jwt.decode(token,None,None)
+        #token = request.META['HTTP_AUTHORIZATION']
+        #decodedPayload = jwt.decode(token,None,None)
 
         content = json.loads(request.body)
         print(content)
@@ -65,6 +64,9 @@ class cal_tax(View):
             if i not in content:
                 Field_not_complete.append(i)
                 check = False
+            else:
+                if content[i] == '':
+                    content[i] = 0
 
                 
         if check == False:
@@ -72,7 +74,6 @@ class cal_tax(View):
             for i in Field_not_complete:
                 s += i
                 s += ", "
-            s -= ", "
             s += " not complete"
             return JsonResponse({'status':'400','msg': s})
         else :
