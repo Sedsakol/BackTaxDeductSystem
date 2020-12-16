@@ -115,13 +115,14 @@ WSGI_APPLICATION = 'BackTaxDeductSystem.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'taxdeduct',
         'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'PASSWORD': '1234',
+        'HOST': 'db',
         'PORT': '3306'
     }
 }

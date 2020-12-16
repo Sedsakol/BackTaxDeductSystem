@@ -1,3 +1,15 @@
 Data Dictionary - TaxDeductSystem.
 link -> https://docs.google.com/spreadsheets/d/14in5weN6ACp_nmZ_3jjG_3Q9HU4nlyAuGyiGf02p32o/edit#gid=0
 
+#docker build (run first time only naja)
+$ docker-compose build
+
+#runserver
+$ docker-compose up -d
+
+#docker migrate
+$ docker-compose run web python manage.py makemigrations
+$ docker-compose run web python manage.py migrate  
+
+#docker create superuser
+$ docker-compose run web python manage.py createsuperuser
