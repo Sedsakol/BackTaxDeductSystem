@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
 from .models import member_profile,User,stair_step
 import jwt
+from datetime import date,datetime
 
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
@@ -247,19 +248,21 @@ class user_profile(View):
         if "gender" in decodedPayload:
             m_p.gender = decodedPayload.get('gender')
         if "birthdate" in decodedPayload:
-            m_p.gender = decodedPayload.get('birthdate')
+            m_p.birthdate = decodedPayload.get('birthdate')
         if "salary" in decodedPayload:
-            m_p.gender = decodedPayload.get('salary')
+            m_p.salary = decodedPayload.get('salary')
         if "other_income" in decodedPayload:
-            m_p.gender = decodedPayload.get('other_income')
+            m_p.other_income = decodedPayload.get('other_income')
         if "parent_num" in decodedPayload:
-            m_p.gender = decodedPayload.get('parent_num')
+            m_p.parent_num = decodedPayload.get('parent_num')
         if "child_num" in decodedPayload:
-            m_p.gender = decodedPayload.get('child_num')
+            m_p.child_num = decodedPayload.get('child_num')
         if "infirm" in decodedPayload:
-            m_p.gender = decodedPayload.get('infirm')
+            m_p.infirm = decodedPayload.get('infirm')
         if "risk" in decodedPayload:
-            m_p.gender = decodedPayload.get('risk')
+            m_p.risk = decodedPayload.get('risk')
+        if "facebook_id" in decodedPayload:
+            m_p.facebook_id = decodedPayload.get('facebook_id')
         m_p.save()
 
         return JsonResponse({'email': u.email,
@@ -273,3 +276,60 @@ class user_profile(View):
         'risk' : m_p.risk,
         'facebook_id' : m_p.facebook_id
         })
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class facebook_login(View):
+    def get(self, request, *args, **kwargs):
+        return JsonResponse({'status':'403','msg':'Forbidden'})
+
+    def post(self, request, *args, **kwargs):
+        content = json.loads(request.body)
+        print(content)
+
+        if "facebook_id" in content and "email" in content and "token" in content :
+            
+            if member_profile.objects.filter(facebook_id= content['facebook_id']).exists():
+                m_p = member_profile.objects.get(facebook_id= content['facebook_id'])
+                u = m_p.user
+                #return profile
+            else:
+                # first time login with this app
+                if User.objects.filter(email= content['email']).exists():
+                    u = User.objects.get(email= content['email'])
+                    if member_profile.objects.filter(user=u).exists():
+                        m_p = member_profile.get(user=u)
+                        m_p.facebook_id = content["facebook_id"]
+                        m_p.save()
+                        #return profile
+                    else:
+                        return JsonResponse({'status':'200','msg':"Don't use email(facebook email) of not member account"})
+                else:
+                    u = User.objects.create_member(email=content["username"],password=content["token"])
+                    u.save()
+
+                    m_p = member_profile()
+                    m_p.user = u
+                    if "gender" in content:
+                        m_p.gender = content["gender"]
+                    if "birthdate" in content:
+                        birthday = datetime.strptime(content["birthdate"],'%d/%m/%y').date()
+                        m_p.birthdate = birthday
+                    m_p.facebook_id = content["facebook_id"]
+                    m_p.save()
+                    #return profile
+                    
+                return JsonResponse({'email': u.email,
+                    'gender': m_p.gender,
+                    'birthdate' : m_p.birthdate,
+                    'salary' : m_p.salary,
+                    'other_income': m_p.other_income,
+                    'parent_num': m_p.parent_num,
+                    'child_num' : m_p.child_num,
+                    'infirm' : m_p.infirm,
+                    'risk' : m_p.risk,
+                    'facebook_id' : m_p.facebook_id
+                    })
+                 
+        else:
+            return JsonResponse({'status':'404','msg':'Error Wrong Format'})

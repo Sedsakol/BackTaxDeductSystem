@@ -25,5 +25,6 @@ urlpatterns = [
     path('auth/refresh_token/', refresh_jwt_token),
     path('register/',views.user_register.as_view()),
     path('profile/',views.user_profile.as_view()),
-    path('tax/',views.cal_tax.as_view())
+    path('tax/',views.cal_tax.as_view()),
+    path('facebook_login/',views.facebook_login.as_view())
 ]
