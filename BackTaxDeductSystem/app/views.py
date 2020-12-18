@@ -287,7 +287,7 @@ class facebook_login(View):
         content = json.loads(request.body)
         print(content)
 
-        if "facebook_id" in content and "email" in content and "token" in content :
+        if "facebook_id" in content and "email" in content and "uid" in content :
             
             if member_profile.objects.filter(facebook_id= content['facebook_id']).exists():
                 m_p = member_profile.objects.get(facebook_id= content['facebook_id'])
@@ -305,7 +305,7 @@ class facebook_login(View):
                     else:
                         return JsonResponse({'status':'200','msg':"Don't use email(facebook email) of not member account"})
                 else:
-                    u = User.objects.create_member(email=content["username"],password=content["token"])
+                    u = User.objects.create_member(email=content["username"],password=content["uid"])
                     u.save()
 
                     m_p = member_profile()
@@ -318,7 +318,7 @@ class facebook_login(View):
                     m_p.facebook_id = content["facebook_id"]
                     m_p.save()
                     #return profile
-                    
+
                 return JsonResponse({'email': u.email,
                     'gender': m_p.gender,
                     'birthdate' : m_p.birthdate,
