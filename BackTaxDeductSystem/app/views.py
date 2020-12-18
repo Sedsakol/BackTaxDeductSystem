@@ -241,29 +241,37 @@ class user_profile(View):
         token = request.META['HTTP_AUTHORIZATION']
         decodedPayload = jwt.decode(token,None,None)
         print(decodedPayload)
+        print(request.body)
         email = decodedPayload.get('email')
+        content = json.loads(request.body)
         u = User.objects.get(email = email)
         m_p = member_profile.objects.get(user = u)
-
-        if "gender" in decodedPayload:
-            m_p.gender = decodedPayload.get('gender')
-        if "birthdate" in decodedPayload:
-            m_p.birthdate = decodedPayload.get('birthdate')
-        if "salary" in decodedPayload:
-            m_p.salary = decodedPayload.get('salary')
-        if "other_income" in decodedPayload:
-            m_p.other_income = decodedPayload.get('other_income')
-        if "parent_num" in decodedPayload:
-            m_p.parent_num = decodedPayload.get('parent_num')
-        if "child_num" in decodedPayload:
-            m_p.child_num = decodedPayload.get('child_num')
-        if "infirm" in decodedPayload:
-            m_p.infirm = decodedPayload.get('infirm')
-        if "risk" in decodedPayload:
-            m_p.risk = decodedPayload.get('risk')
-        if "facebook_id" in decodedPayload:
-            m_p.facebook_id = decodedPayload.get('facebook_id')
+        
+        if "gender" in content:
+            m_p.gender = int(content.get('gender'))
+        if "birthdate" in content:
+            m_p.birthdate = datetime.strptime(content.get('birthdate'), '%d/%m/%Y').date()
+        if "salary" in content:
+            m_p.salary = int(content.get('salary'))
+        if "other_income" in content:
+            m_p.other_income = int(content.get('other_income'))
+        if "parent_num" in content:
+            m_p.parent_num = int(content.get('parent_num'))
+        if "child_num" in content:
+            m_p.child_num = int(content.get('child_num'))
+        if "infirm" in content:
+            m_p.infirm = int(content.get('infirm'))
+        if "marriage" in content:
+            m_p.marriage = int(content.get('marriage'))
+        if "risk" in content:
+            m_p.risk = int(content.get('risk'))
+        if "facebook_id" in content:
+            if content.get('facebook_id'):
+                m_p.facebook_id = content.get('facebook_id')
         m_p.save()
+
+        u = User.objects.get(email = email)
+        m_p = member_profile.objects.get(user = u)
 
         return JsonResponse({'email': u.email,
         'gender': m_p.gender,
@@ -272,10 +280,11 @@ class user_profile(View):
         'other_income': m_p.other_income,
         'parent_num': m_p.parent_num,
         'child_num' : m_p.child_num,
+        'marriage' : m_p.marriage,
         'infirm' : m_p.infirm,
         'risk' : m_p.risk,
         'facebook_id' : m_p.facebook_id
-        })
+        }) 
 
 
 @method_decorator(csrf_exempt, name='dispatch')
