@@ -292,7 +292,7 @@ class facebook_login(View):
             if member_profile.objects.filter(facebook_id= content['facebook_id']).exists():
                 m_p = member_profile.objects.get(facebook_id= content['facebook_id'])
                 u = m_p.user
-                #return profile
+                #return msg use login auth
             else:
                 # first time login with this app
                 if User.objects.filter(email= content['email']).exists():
@@ -301,9 +301,9 @@ class facebook_login(View):
                         m_p = member_profile.get(user=u)
                         m_p.facebook_id = content["facebook_id"]
                         m_p.save()
-                        #return profile
+                        #return msg use login auth
                     else:
-                        return JsonResponse({'status':'200','msg':"Don't use email(facebook email) of not member account"})
+                        return JsonResponse({'status':'403','msg':"Don't use email(facebook email) of not member account"})
                 else:
                     u = User.objects.create_member(email=content["username"],password=content["uid"])
                     u.save()
@@ -317,19 +317,8 @@ class facebook_login(View):
                         m_p.birthdate = birthday
                     m_p.facebook_id = content["facebook_id"]
                     m_p.save()
-                    #return profile
+                    #return msg use login auth
 
-                return JsonResponse({'email': u.email,
-                    'gender': m_p.gender,
-                    'birthdate' : m_p.birthdate,
-                    'salary' : m_p.salary,
-                    'other_income': m_p.other_income,
-                    'parent_num': m_p.parent_num,
-                    'child_num' : m_p.child_num,
-                    'infirm' : m_p.infirm,
-                    'risk' : m_p.risk,
-                    'facebook_id' : m_p.facebook_id
-                    })
-                 
+            return JsonResponse({'status':'200','msg':"use login auth"})
         else:
-            return JsonResponse({'status':'404','msg':'Error Wrong Format'})
+            return JsonResponse({'status':'400','msg':'Error Wrong Format'})
