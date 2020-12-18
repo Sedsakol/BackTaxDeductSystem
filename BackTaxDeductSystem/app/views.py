@@ -295,6 +295,8 @@ class facebook_login(View):
                 #return msg use login auth
             else:
                 # first time login with this app
+
+                #update social account
                 if User.objects.filter(email= content['email']).exists():
                     u = User.objects.get(email= content['email'])
                     if member_profile.objects.filter(user=u).exists():
@@ -308,8 +310,7 @@ class facebook_login(View):
                     u = User.objects.create_member(email=content["username"],password=content["uid"])
                     u.save()
 
-                    m_p = member_profile()
-                    m_p.user = u
+                    m_p = member_profile.objects.get(user=u)
                     if "gender" in content:
                         m_p.gender = content["gender"]
                     if "birthdate" in content:
