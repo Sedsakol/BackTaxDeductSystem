@@ -288,26 +288,24 @@ class facebook_login(View):
         print(content)
 
         if "facebook_id" in content and "email" in content and "uid" in content :
-            
             if member_profile.objects.filter(facebook_id= content['facebook_id']).exists():
                 m_p = member_profile.objects.get(facebook_id= content['facebook_id'])
                 u = m_p.user
                 #return msg use login auth
             else:
                 # first time login with this app
-
                 #update social account
                 if User.objects.filter(email= content['email']).exists():
                     u = User.objects.get(email= content['email'])
                     if member_profile.objects.filter(user=u).exists():
-                        m_p = member_profile.get(user=u)
+                        m_p = member_profile.objects.get(user=u)
                         m_p.facebook_id = content["facebook_id"]
                         m_p.save()
                         #return msg use login auth
                     else:
                         return JsonResponse({'status':'403','msg':"Don't use email(facebook email) of not member account"})
                 else:
-                    u = User.objects.create_member(email=content["username"],password=content["uid"])
+                    u = User.objects.create_member(email=content["email"],password=content["uid"])
                     u.save()
 
                     m_p = member_profile.objects.get(user=u)
@@ -318,8 +316,9 @@ class facebook_login(View):
                         m_p.birthdate = birthday
                     m_p.facebook_id = content["facebook_id"]
                     m_p.save()
+                    
                     #return msg use login auth
-
+            
             return JsonResponse({'status':'200','msg':"use login auth"})
         else:
             return JsonResponse({'status':'400','msg':'Error Wrong Format'})
