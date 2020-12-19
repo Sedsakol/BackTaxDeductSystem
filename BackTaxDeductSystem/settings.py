@@ -27,7 +27,7 @@ SECRET_KEY = 'w1*eww-u*ua2m3u$wak6w-oe5&ks($z+&w@twe-&7j3rum)!ne'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','161.246.5.140','[::1]','https://taxdeduct.herokuapp.com/']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','161.246.5.140','[::1]','taxdeduct.herokuapp.com']
 
 
 # Application definition
