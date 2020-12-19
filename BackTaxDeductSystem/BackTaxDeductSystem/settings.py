@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 import datetime
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,7 +28,7 @@ SECRET_KEY = 'w1*eww-u*ua2m3u$wak6w-oe5&ks($z+&w@twe-&7j3rum)!ne'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','161.246.5.140','*']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','161.246.5.140','[::1]']
 
 
 # Application definition
@@ -69,23 +70,11 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7)
 }
 
-
-""" CORS_ORIGIN_WHITELIST = (
-    'http://:localhost:8000',
-    'http://:localhost:80',
-    'http://:localhost',
-    'http://:161.246.5.140:8000',
-    'http://:161.246.5.140:80',
-    'http://:161.246.5.140',
-    'https://taxdeduct-2bd59.firebaseapp.com/',
-    'https://taxdeduct-2bd59.web.app/'
-) """
-
-
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -94,6 +83,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'BackTaxDeductSystem.urls'
 
@@ -170,5 +161,11 @@ AUTH_USER_MODEL = 'app.User'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
