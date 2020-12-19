@@ -332,6 +332,3 @@ class facebook_login(View):
             return JsonResponse({'status':'200','msg':"use login auth"})
         else:
             return JsonResponse({'status':'400','msg':'Error Wrong Format'})
-
-def firebase_allow_site(request):
-    return HttpResponse('google-site-verification: google751aea634420da39.html')
