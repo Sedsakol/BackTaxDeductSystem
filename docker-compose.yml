@@ -5,7 +5,7 @@ services:
       restart: always
       container_name: TaxDeductSystem_DB_MySQL
       ports:
-        - 3308:3306
+        - 80:3306
       environment: 
         MYSQL_DATABASE: taxdeduct
         MYSQL_USER: root
@@ -17,10 +17,10 @@ services:
     web:
       build: .
       ports:
-        - "80:8000"
+        - "8000:8000"
       container_name: TaxDeductSystem_Back_Web
       volumes:
-        - "./BackTaxDeductSystem:/BackTaxDeductSystem"
+        - ".:/BackTaxDeductSystem"
       command: python manage.py runserver 0.0.0.0:8000
       depends_on:
         - db
