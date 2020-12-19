@@ -12,6 +12,7 @@ from django.contrib.auth import get_user_model
 from .models import member_profile,User,stair_step
 import jwt
 from datetime import date,datetime
+from django.http import HttpResponse
 
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
@@ -331,3 +332,6 @@ class facebook_login(View):
             return JsonResponse({'status':'200','msg':"use login auth"})
         else:
             return JsonResponse({'status':'400','msg':'Error Wrong Format'})
+
+def firebase_allow_site(request):
+    return HttpResponse('google-site-verification: google751aea634420da39.html')

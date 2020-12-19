@@ -69,14 +69,18 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7)
 }
 
-CORS_ORIGIN_WHITELIST = (
+
+""" CORS_ORIGIN_WHITELIST = (
     'http://:localhost:8000',
     'http://:localhost:80',
     'http://:localhost',
     'http://:161.246.5.140:8000',
     'http://:161.246.5.140:80',
     'http://:161.246.5.140',
-)
+    'https://taxdeduct-2bd59.firebaseapp.com/',
+    'https://taxdeduct-2bd59.web.app/'
+) """
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 
