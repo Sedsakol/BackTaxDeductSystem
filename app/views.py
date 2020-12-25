@@ -320,13 +320,12 @@ class facebook_login(View):
 
                     m_p = member_profile.objects.get(user=u)
                     if "gender" in content:
-                        m_p.gender = content["gender"]
+                        m_p.gender = int(content["gender"])
                     if "birthdate" in content:
-                        birthday = datetime.strptime(content["birthdate"],'%d/%m/%y').date()
+                        birthday = datetime.strptime(content["birthdate"], '%d/%m/%Y').date()
                         m_p.birthdate = birthday
                     m_p.facebook_id = content["facebook_id"]
                     m_p.save()
-                    
                     #return msg use login auth
             
             return JsonResponse({'status':'200','msg':"use login auth"})
