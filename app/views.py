@@ -13,6 +13,10 @@ from .models import member_profile,User,stair_step
 import jwt
 from datetime import date,datetime
 from django.http import HttpResponse
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import auth
+import os
 
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
@@ -347,9 +351,20 @@ class delete_user(View):
         content = json.loads(request.body)
         if "email" in content:
             if email == content.get('email'):
+                #delete in firebase
+                path = str(os.getcwd())  + '\\taxdeduct-2bd59-firebase-adminsdk-9d64q-2c4d819f14.json'
+                cred = credentials.Certificate(path)
+                firebase_admin.initialize_app(cred)
+                user_firebase = auth.get_user_by_email(email)
+                auth.delete_user(user_firebase.uid)
+                print('Successfully deleted user firebase')
+
+                #delete in db
                 u = User.objects.get(email = email)
                 m_p = member_profile.objects.get(user = u)
                 m_p.delete()
                 u.delete()
+                print('Successfully deleted user in DB')
+
                 return JsonResponse({'status':'200','msg':"delete user complete"})
         return JsonResponse({'status':'400','msg':'Error Wrong Format'})
