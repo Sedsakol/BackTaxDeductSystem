@@ -331,3 +331,25 @@ class facebook_login(View):
             return JsonResponse({'status':'200','msg':"use login auth"})
         else:
             return JsonResponse({'status':'400','msg':'Error Wrong Format'})
+
+@method_decorator(csrf_exempt, name='dispatch')
+class delete_user(View):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request, *args, **kwargs):
+        return JsonResponse({'status':'403','msg':'Forbidden'})
+
+    def post(self, request, *args, **kwargs):
+        token = request.META['HTTP_AUTHORIZATION']
+        decodedPayload = jwt.decode(token,None,None)
+        print(decodedPayload)
+        print(request.body)
+        email = decodedPayload.get('email')
+        content = json.loads(request.body)
+        if "email" in content:
+            if email == content.get('email'):
+                u = User.objects.get(email = email)
+                m_p = member_profile.objects.get(user = u)
+                m_p.delete()
+                u.delete()
+                return JsonResponse({'status':'200','msg':"delete user complete"})
+        return JsonResponse({'status':'400','msg':'Error Wrong Format'})
