@@ -361,8 +361,6 @@ class delete_user(View):
 
                 #delete in db
                 u = User.objects.get(email = email)
-                m_p = member_profile.objects.get(user = u)
-                m_p.delete()
                 u.delete()
                 print('Successfully deleted user in DB')
 
