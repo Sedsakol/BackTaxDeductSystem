@@ -332,7 +332,7 @@ class facebook_login(View):
                     m_p.facebook_id = content["facebook_id"]
                     m_p.save()
                     #return msg use login auth
-            
+
             return JsonResponse({'status':'200','msg':"use login auth"})
         else:
             return JsonResponse({'status':'400','msg':'Error Wrong Format'})
@@ -354,8 +354,7 @@ class delete_user(View):
             if email == content.get('email'):
                 #delete in firebase
                 path = os.path.join(str(os.getcwd()), "taxdeduct-2bd59-firebase-adminsdk-9d64q-2c4d819f14.json")
-                print(path)
-                sys.stdout.flush()
+                
                 cred = credentials.Certificate(path)
                 firebase_admin.initialize_app(cred)
                 user_firebase = auth.get_user_by_email(email)
