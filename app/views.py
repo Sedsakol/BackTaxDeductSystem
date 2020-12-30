@@ -353,7 +353,7 @@ class delete_user(View):
         if "email" in content:
             if email == content.get('email'):
                 #delete in firebase
-                path = str(os.getcwd())  + '\\taxdeduct-2bd59-firebase-adminsdk-9d64q-2c4d819f14.json'
+                path = os.path.join(str(os.getcwd()), "taxdeduct-2bd59-firebase-adminsdk-9d64q-2c4d819f14.json")
                 print(path)
                 sys.stdout.flush()
                 cred = credentials.Certificate(path)
