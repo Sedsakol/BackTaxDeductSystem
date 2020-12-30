@@ -17,6 +17,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import auth
 import os
+import sys
 
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
@@ -353,6 +354,8 @@ class delete_user(View):
             if email == content.get('email'):
                 #delete in firebase
                 path = str(os.getcwd())  + '\\taxdeduct-2bd59-firebase-adminsdk-9d64q-2c4d819f14.json'
+                print(path)
+                sys.stdout.flush()
                 cred = credentials.Certificate(path)
                 firebase_admin.initialize_app(cred)
                 user_firebase = auth.get_user_by_email(email)
