@@ -366,5 +366,8 @@ class delete_user(View):
                 u.delete()
                 print('Successfully deleted user in DB')
 
+                #debug for heroku
+                sys.stdout.flush()
+
                 return JsonResponse({'status':'200','msg':"delete user complete"})
         return JsonResponse({'status':'400','msg':'Error Wrong Format'})
