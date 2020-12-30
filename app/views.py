@@ -353,10 +353,11 @@ class delete_user(View):
         if "email" in content:
             if email == content.get('email'):
                 #delete in firebase
-                path = os.path.join(str(os.getcwd()), "taxdeduct-2bd59-firebase-adminsdk-9d64q-2c4d819f14.json")
-                
-                cred = credentials.Certificate(path)
-                firebase_admin.initialize_app(cred)
+                if not firebase_admin._apps:
+                    path = os.path.join(str(os.getcwd()), "taxdeduct-2bd59-firebase-adminsdk-9d64q-2c4d819f14.json")
+                    cred = credentials.Certificate(path)
+                    firebase_admin.initialize_app(cred)
+                    
                 user_firebase = auth.get_user_by_email(email)
                 auth.delete_user(user_firebase.uid)
                 print('Successfully deleted user firebase')
