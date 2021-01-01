@@ -302,7 +302,7 @@ class facebook_login(View):
         content = json.loads(request.body)
         print(content)
 
-        if "facebook_id" in content and "email" in content and "uid" in content :
+        if "facebook_id" in content and "email" in content :
             if member_profile.objects.filter(facebook_id= content['facebook_id']).exists():
                 m_p = member_profile.objects.get(facebook_id= content['facebook_id'])
                 u = m_p.user
@@ -320,7 +320,7 @@ class facebook_login(View):
                     else:
                         return JsonResponse({'status':'403','msg':"Don't use email(facebook email) of not member account"})
                 else:
-                    u = User.objects.create_member(email=content["email"],password=content["uid"])
+                    u = User.objects.create_member(email=content["email"],password=content["facebook_id"])
                     u.save()
 
                     m_p = member_profile.objects.get(user=u)
@@ -359,8 +359,9 @@ class delete_user(View):
                     firebase_admin.initialize_app(cred)
                     
                 user_firebase = auth.get_user_by_email(email)
-                auth.delete_user(user_firebase.uid)
-                print('Successfully deleted user firebase')
+                if user_firebase:
+                    auth.delete_user(user_firebase.uid)
+                    print('Successfully deleted user firebase')
 
                 #delete in db
                 u = User.objects.get(email = email)
