@@ -358,10 +358,12 @@ class delete_user(View):
                     cred = credentials.Certificate(path)
                     firebase_admin.initialize_app(cred)
                     
-                user_firebase = auth.get_user_by_email(email)
-                if user_firebase:
+                try:
+                    user_firebase = auth.get_user_by_email(email)
                     auth.delete_user(user_firebase.uid)
                     print('Successfully deleted user firebase')
+                except:
+                    print("No this User in Firebase Auth")
 
                 #delete in db
                 u = User.objects.get(email = email)
