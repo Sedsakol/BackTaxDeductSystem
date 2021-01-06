@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin , Group
 from django.utils import timezone
+
 # Create your models here.
 
 
@@ -190,7 +191,6 @@ class fund_list(models.Model):
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
-
 #insurance
 class insurance_type(models.Model):
     name = models.CharField(max_length=250)
@@ -208,3 +208,9 @@ class insurance_list(models.Model):
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
+#facebook
+class facebook_categories(models.Model):
+    facebook_id = models.CharField(max_length=250, null=False,blank=False)
+    categories_version = models.IntegerField(null=False,blank=False)
+    data = models.JSONField()
+    created = models.DateTimeField(auto_now_add=True, editable=False)
