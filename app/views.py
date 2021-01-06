@@ -15,6 +15,7 @@ from datetime import date,datetime
 from django.http import HttpResponse
 import os
 import sys
+import requests
 
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
@@ -6577,18 +6578,39 @@ class categories(View):
                     "Video Creator" : 0 ,
                     "Writer" : 0
                 }
+                while True :  
+                    
+                    if version == 1 :
+                        #print(content_data["data"])
+                        for c in content_data["data"] :
+                            if "category" in c :
+                                if c["category"] in categorie_all :
+                                    cat_key = c["category"]
+                                    cat = categorie_all[cat_key]
+                                    while cat["level"] > 1 :
+                                        cat_key = cat["parent"]
+                                        cat = categorie_all[cat_key]
+                                    if cat_key in json_obj:
+                                        json_obj[cat_key] += 1
 
-                next_data_url = None
-                if "paging" in content_data:
-                    if "next" in content_data["paging"] :
-                        next_data_url = content_data["paging"]["next"]
-                if version == 1 :
-                    for c in content_data["data"] :
-                        if "category" in c :
-                            cat = c["category"]
+                    next_data_url = None
+                    if "paging" in content_data:
+                        if "next" in content_data["paging"] :
+                            next_data_url = content_data["paging"]["next"]
+                    else:
+                        print('Error format in create_facebook_categories')
+                        return False
+                        break
 
-                    return True
-
+                    if next_data_url :
+                        r = requests.get(next_data_url)
+                        content_data = json.loads(r.content)
+                        
+                    else:
+                        print(json_obj)
+                        f_cate.data = json_obj
+                        f_cate.save()
+                        return True
         return False
 
 
@@ -6605,7 +6627,7 @@ class categories(View):
         if "id" in content and "likes" in content :
             content_id = int(content["id"])
             content_data = content["likes"]
-            #self.create_facebook_categories(content_id = content_id, content_data = content_data, version=1)
+            self.create_facebook_categories(content_id = content_id, content_data = content_data, version=1)
 
 
         #debug for heroku
@@ -6613,3 +6635,5 @@ class categories(View):
 
         return JsonResponse({'status':'200','msg':'OK'})
         
+
+
