@@ -14,6 +14,6 @@ $ docker-compose run web python manage.py migrate
 #docker create superuser
 $ docker-compose run web python manage.py createsuperuser
 
-#superuser
-user: admin@admin.com
-pass: rootroot
+    #superuser (run first time only naja)
+    user: admin@admin.com
+    pass: rootroot
