@@ -116,8 +116,8 @@ DATABASES = {
         'NAME': 'taxdeduct',
         'USER': 'root',
         'PASSWORD': '1234',
-        'HOST': os.environ.get("HOST_DB", default='101.51.95.110'),
-        'PORT': os.environ.get("PORT_DB", default='3306')
+        'HOST': os.environ.get("HOST_DB", default='161.246.5.140'),
+        'PORT': os.environ.get("PORT_DB", default='80')
     }
 }
 
