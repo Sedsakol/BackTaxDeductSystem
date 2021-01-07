@@ -166,7 +166,7 @@ class member_profile(models.Model):
 #stair
 class stair_step(models.Model):
     step = models.IntegerField(unique=True)
-    max_money = models.IntegerField()
+    max_money = models.IntegerField(null=True,blank=False)
     rate = models.FloatField()
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
