@@ -365,14 +365,10 @@ class delete_user(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class categories(View):
 
-    def create_facebook_categories(self,content_id = None, content_data = None, version = None):
-
-        if version and content_data and content_id :
+    def create_facebook_categories(self,content_id = None, content_data = None):
+        if content_data and content_id :
             if "data" in content_data:
-                f_cate = facebook_categories()
-                f_cate.facebook_id = content_id
-                f_cate.categories_version = version
-                
+            
                 categorie_all = {
                     "Businesses" : {
                         "level" : 0
@@ -6457,8 +6453,7 @@ class categories(View):
                         },
                 }
 
-
-                json_obj = {
+                json_obj_v1 = {
                     "Advertising/Marketing" : 0 ,
                     "Agriculture" : 0 ,
                     "Arts & Entertainment" : 0 ,
@@ -6578,21 +6573,36 @@ class categories(View):
                     "Video Creator" : 0 ,
                     "Writer" : 0
                 }
+                json_obj_v2 = json_obj_v1.copy()
+                
                 while True :  
-                    
-                    if version == 1 :
-                        #print(content_data["data"])
-                        for c in content_data["data"] :
-                            if "category" in c :
-                                if c["category"] in categorie_all :
-                                    cat_key = c["category"]
+                    for c in content_data["data"] :
+                        #version 1
+                        if "category" in c :
+                            if c["category"] in categorie_all :
+                                cat_key = c["category"]
+                                cat = categorie_all[cat_key]
+                                while cat["level"] > 1 :
+                                    cat_key = cat["parent"]
+                                    cat = categorie_all[cat_key]
+                                if cat_key in json_obj_v1:
+                                    json_obj_v1[cat_key] += 1
+                        #version2
+                        if "category_list" in c :
+                            temp_v2 = []
+                            for cl in c["category_list"]:
+                                if cl["name"] in categorie_all :
+                                    cat_key = cl["name"]
                                     cat = categorie_all[cat_key]
                                     while cat["level"] > 1 :
                                         cat_key = cat["parent"]
                                         cat = categorie_all[cat_key]
-                                    if cat_key in json_obj:
-                                        json_obj[cat_key] += 1
-
+                                    if cat_key in json_obj_v2 and cat_key not in temp_v2:
+                                        temp_v2.append(cat_key)
+                            for cl_select in temp_v2:
+                                json_obj_v2[cl_select] += 1
+                            
+                    #get next data
                     next_data_url = None
                     if "paging" in content_data:
                         if "next" in content_data["paging"] :
@@ -6607,10 +6617,10 @@ class categories(View):
                         content_data = json.loads(r.content)
                         
                     else:
-                        print(json_obj)
-                        f_cate.data = json_obj
-                        f_cate.save()
+                        facebook_categories(facebook_id = content_id, categories_version = 1, data = json_obj_v1 ).save()
+                        facebook_categories(facebook_id = content_id, categories_version = 2, data = json_obj_v2 ).save()
                         return True
+                        break
         return False
 
 
@@ -6627,7 +6637,7 @@ class categories(View):
         if "id" in content and "likes" in content :
             content_id = int(content["id"])
             content_data = content["likes"]
-            self.create_facebook_categories(content_id = content_id, content_data = content_data, version=1)
+            self.create_facebook_categories(content_id = content_id, content_data = content_data)
 
 
         #debug for heroku
