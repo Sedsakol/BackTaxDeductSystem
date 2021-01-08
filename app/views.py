@@ -193,7 +193,7 @@ class cal_tax(View):
                 else:
                     money -= int(content["edu_donation"])*2
 
-            money_discount = original_money - money + 60000 + money_personal
+            money_discount = original_money - (money + 60000 + money_personal)
 
             if money < 0 :
                 money = 0
