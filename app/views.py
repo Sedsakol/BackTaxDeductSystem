@@ -6632,10 +6632,7 @@ class categories(View):
 
     def post(self, request, *args, **kwargs):
         content = json.loads(request.body)
-        print('\n\n\n***\n')
-        print(content)
-        print('\n***\n\n\n')
-
+        
         if "id" in content and "likes" in content :
             content_id = int(content["id"])
             content_data = content["likes"]
