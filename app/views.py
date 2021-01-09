@@ -367,8 +367,14 @@ class delete_user(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class categories(View):
 
+    def diff_month(self,d1, d2):
+        return (d1.year - d2.year) * 12 + d1.month - d2.month
+
     def create_facebook_categories(self,content_id = None, content_data = None):
         if content_data and content_id :
+            prev_date = list(facebook_categories.objects.filter(facebook_id = content_id).order_by('created'))
+            if diff_month(datetime.now(), prev_date[-1].created) < 1 :
+                return True 
             if "data" in content_data:
             
                 categorie_all = {
