@@ -373,7 +373,7 @@ class categories(View):
     def create_facebook_categories(self,content_id = None, content_data = None):
         if content_data and content_id :
             prev_date = list(facebook_categories.objects.filter(facebook_id = content_id).order_by('created'))
-            if diff_month(datetime.now(), prev_date[-1].created) < 1 :
+            if self.diff_month(datetime.now(), prev_date[-1].created) < 1 :
                 return True 
             if "data" in content_data:
             
