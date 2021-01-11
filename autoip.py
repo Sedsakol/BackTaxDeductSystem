@@ -11,11 +11,12 @@ def auto_push_git():
     repo = git.Repo(PATH_OF_GIT_REPO)
     repo.git.add(update=True)
     repo.index.commit(COMMIT_MESSAGE)
-    origin = repo.branches['Emergency-Deployed']
+    origin = repo.remote(name='origin')
     origin.pull()
     origin.push()
     print('push to branch Emergency-Deployed complete')
 
+    '''
     repo = git.Repo(PATH_OF_GIT_REPO)
     current = repo.branches['Emergency-Deployed']
     main = repo.branches['Deploy']
@@ -25,6 +26,7 @@ def auto_push_git():
     current.checkout(force=True)
     origin.pull()
     origin.push()
+    '''
 
     print('merge branch Emergency-Deployed to branch Deploy complete')
     #except:
