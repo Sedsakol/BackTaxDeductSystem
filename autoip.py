@@ -17,11 +17,11 @@ def auto_push_git():
     print('push to branch Emergency-Deployed complete')
 
     repo = git.Repo(PATH_OF_GIT_REPO)
-    current = repo.branches['Emergency-Deployed']
-    main = repo.branches['Deploy']
+    current = repo.branches['Deploy']
+    main = repo.branches['Emergency-Deployed']
     base = repo.merge_base(current, main)
     repo.index.merge_tree(main, base=base)
-    repo.index.commit('Merge main into feature',parent_commits=(current.commit, main.commit))
+    repo.index.commit('Merge branch Emergency-Deployed to branch Deploy',parent_commits=(current.commit, main.commit))
     current.checkout(force=True)
     origin.pull()
     origin.push()
