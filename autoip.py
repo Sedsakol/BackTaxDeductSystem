@@ -12,6 +12,7 @@ def auto_push_git():
         repo.git.add(update=True)
         repo.index.commit(COMMIT_MESSAGE)
         origin = repo.remote('Emergency-Deployed')
+        origin.pull()
         origin.push()
         print('push to branch Emergency-Deployed complete')
 
