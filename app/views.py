@@ -48,11 +48,11 @@ class cal_tax(View):
             if money > stair_list[i]:
                 current_stair += 1
         if current_stair == 0 :
-            return 0
+            return 0 , current_stair
         else :
             money -= stair_list[current_stair-1]
             tax = rate[current_stair]/100 * money + dis_money[current_stair-1]
-            return tax
+            return tax , current_stair
 
     def get(self, request, *args, **kwargs):
         return JsonResponse({'status':'403','msg':'Forbidden'})
@@ -197,9 +197,9 @@ class cal_tax(View):
 
             if money < 0 :
                 money = 0
-            tax = self.cal_tax_stair(money)
+            tax , current_stair = self.cal_tax_stair(money)
 
-            return JsonResponse({'status':'200','tax': tax ,'net_income' : money ,'personal_allowance' : money_personal,'allowance': money_discount})
+            return JsonResponse({'status':'200','tax': tax ,'net_income' : money ,'personal_allowance' : money_personal,'allowance': money_discount , 'stair' : current_stair})
 
 @method_decorator(csrf_exempt, name='dispatch')
 class user_register(View):
