@@ -26,9 +26,11 @@ def auto_push_git():
     current.checkout(force=True)
     origin.pull()
     origin.push()
-    '''
 
     print('merge branch Emergency-Deployed to branch Deploy complete')
+    '''
+
+    
     #except:
     #    print('Some error occured while pushing the code') 
 
