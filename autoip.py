@@ -23,6 +23,8 @@ def auto_push_git():
     repo.index.merge_tree(main, base=base)
     repo.index.commit('Merge main into feature',parent_commits=(current.commit, main.commit))
     current.checkout(force=True)
+    origin.pull()
+    origin.push()
 
     print('merge branch Emergency-Deployed to branch Deploy complete')
     #except:
