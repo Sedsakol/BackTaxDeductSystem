@@ -4,7 +4,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import git
 
 def auto_push_git():
-    PATH_OF_GIT_REPO = '.' 
+    PATH_OF_GIT_REPO = './.git' 
     COMMIT_MESSAGE = 'auto update public ip'
     print('auto push to git')
     try:
