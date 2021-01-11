@@ -1,26 +1,29 @@
 from requests import get
 import atexit
 from apscheduler.schedulers.blocking import BlockingScheduler
-from git import Repo
+import git
 
 def auto_push_git():
-    PATH_OF_GIT_REPO = '.\.git'  # make sure .git folder is properly configured
+    PATH_OF_GIT_REPO = '.' 
     COMMIT_MESSAGE = 'auto update public ip'
     print('auto push to git')
     try:
-        repo = Repo(PATH_OF_GIT_REPO)
+        repo = git.Repo(PATH_OF_GIT_REPO)
         repo.git.add(update=True)
         repo.index.commit(COMMIT_MESSAGE)
         origin = repo.remote(name='Emergency-Deployed')
         origin.push()
-        print('push to brancn Emergency-Deployed complete')
+        print('push to branch Emergency-Deployed complete')
 
-        repo = Repo(PATH_OF_GIT_REPO)
-        repo.git.add(update=True)
-        repo.index.commit(COMMIT_MESSAGE)
-        origin = repo.remote(name='Deploy')
-        origin.push()
-        print('push to brancn Deploy complete')
+        repo = git.Repo(PATH_OF_GIT_REPO)
+        current = repo.branches['Emergency-Deployed']
+        main = repo.branches['Deploy']
+        base = repo.merge_base(current, main)
+        repo.index.merge_tree(main, base=base)
+        repo.index.commit('Merge main into feature',parent_commits=(current.commit, main.commit))
+        current.checkout(force=True)
+
+        print('merge branch Emergency-Deployed to branch Deploy complete')
     except:
         print('Some error occured while pushing the code') 
 
@@ -77,7 +80,6 @@ def change_ip():
             if old_ip in x:
                 index = temp_lines.index(x)
                 temp_lines[index] = x.replace(old_ip,new_ip)
-                break
         
         temp_all = ''
         for x in temp_lines:
@@ -95,10 +97,13 @@ def change_ip():
 
 
 
-scheduler = BlockingScheduler() 
-scheduler.add_job(func=change_ip, trigger="interval", seconds=5)
-scheduler.start()
+#scheduler = BlockingScheduler() 
+#scheduler.add_job(func=change_ip, trigger="interval", seconds=5)
+#scheduler.start()
 
 # Shut down the scheduler when exiting the app
-atexit.register(lambda: scheduler.shutdown())
+#atexit.register(lambda: scheduler.shutdown())
+
+auto_push_git()
+
 
