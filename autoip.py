@@ -7,26 +7,26 @@ def auto_push_git():
     PATH_OF_GIT_REPO = '.' 
     COMMIT_MESSAGE = 'auto update public ip'
     print('auto push to git')
-    try:
-        repo = git.Repo(PATH_OF_GIT_REPO)
-        repo.git.add(update=True)
-        repo.index.commit(COMMIT_MESSAGE)
-        origin = repo.remote('Emergency-Deployed')
-        origin.pull()
-        origin.push()
-        print('push to branch Emergency-Deployed complete')
+    #try:
+    repo = git.Repo(PATH_OF_GIT_REPO)
+    repo.git.add(update=True)
+    repo.index.commit(COMMIT_MESSAGE)
+    origin = repo.remote('Emergency-Deployed')
+    origin.pull()
+    origin.push()
+    print('push to branch Emergency-Deployed complete')
 
-        repo = git.Repo(PATH_OF_GIT_REPO)
-        current = repo.branches['Emergency-Deployed']
-        main = repo.branches['Deploy']
-        base = repo.merge_base(current, main)
-        repo.index.merge_tree(main, base=base)
-        repo.index.commit('Merge main into feature',parent_commits=(current.commit, main.commit))
-        current.checkout(force=True)
+    repo = git.Repo(PATH_OF_GIT_REPO)
+    current = repo.branches['Emergency-Deployed']
+    main = repo.branches['Deploy']
+    base = repo.merge_base(current, main)
+    repo.index.merge_tree(main, base=base)
+    repo.index.commit('Merge main into feature',parent_commits=(current.commit, main.commit))
+    current.checkout(force=True)
 
-        print('merge branch Emergency-Deployed to branch Deploy complete')
-    except:
-        print('Some error occured while pushing the code') 
+    print('merge branch Emergency-Deployed to branch Deploy complete')
+    #except:
+    #    print('Some error occured while pushing the code') 
 
     return None   
 
