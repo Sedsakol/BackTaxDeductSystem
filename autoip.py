@@ -4,13 +4,14 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import git
 
 def auto_push_git():
-    PATH_OF_GIT_REPO = './.git' 
+    PATH_OF_GIT_REPO = '.' 
     COMMIT_MESSAGE = 'auto update public ip'
     print('auto push to git')
     try:
         repo = git.Repo(PATH_OF_GIT_REPO)
         repo.git.add(update=True)
         repo.index.commit(COMMIT_MESSAGE)
+        print(1)
         origin = repo.remote(name='Emergency-Deployed')
         origin.push()
         print('push to branch Emergency-Deployed complete')
