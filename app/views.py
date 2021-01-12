@@ -256,7 +256,8 @@ class user_profile(View):
         if "gender" in content:
             m_p.gender = int(content.get('gender'))
         if "birthdate" in content:
-            m_p.birthdate = datetime.strptime(content.get('birthdate'), '%d/%m/%Y').date()
+            if content.get('birthdate') :
+                m_p.birthdate = datetime.strptime(content.get('birthdate'), '%d/%m/%Y').date()
         if "salary" in content:
             m_p.salary = int(content.get('salary'))
         if "other_income" in content:
