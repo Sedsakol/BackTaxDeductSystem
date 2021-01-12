@@ -6658,8 +6658,8 @@ class user_tax_predict(View):
     def get(self, request, *args, **kwargs):
         token = request.META['HTTP_AUTHORIZATION']
         decodedPayload = jwt.decode(token,None,None)
-        print(decodedPayload)
-        print(request.body)
+        #print(decodedPayload)
+        #print(request.body)
         email = decodedPayload.get('email')
 
         #return plan_type_all
@@ -6706,7 +6706,6 @@ class user_tax_predict(View):
             plan_type_list.append(json_obj)
             index += 1
 
-        print(plan_type_list)
         #debug for heroku
         sys.stdout.flush()
 
@@ -6716,12 +6715,22 @@ class user_tax_predict(View):
         token = request.META['HTTP_AUTHORIZATION']
         decodedPayload = jwt.decode(token,None,None)
         print(decodedPayload)
-        print(request.body)
+        print(json.loads(request.body))
         email = decodedPayload.get('email')
-        
-        #ml part
-        plan_type = 1
+        content = json.loads(request.body)
+        if not content.get('facebook_id') :
+            return JsonResponse({'status':'201','msg': 'for facebook user only'})
+        else:
+            fc = facebook_categories.objects.filter(facebook_id = content.get('facebook_id')).order_by('-created')[0]
+            u = User.objects.get(email = email)
+            mp = member_profile.objects.get(user = u)
 
-        return JsonResponse({'status':'200','email': email , 'plan_type' : plan_type})
+            #ml part
+            user_plan_type = 1
+
+            #debug for heroku
+            sys.stdout.flush()
+
+            return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type})
 
         
