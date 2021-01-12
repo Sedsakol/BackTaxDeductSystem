@@ -6700,7 +6700,7 @@ class user_tax_predict(View):
                 'id' : index,
                 'plan_type_name' : p.plan_name,
                 'plan_description' : p.plan_description,
-                'plan_data' : p.plan_data
+                'plan_data' : json.dumps(p.plan_data, ensure_ascii=False) 
             }
             plan_type_list.append(json_obj)
             index += 1
