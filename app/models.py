@@ -219,6 +219,6 @@ class facebook_categories(models.Model):
 class plan_types(models.Model):
     plan_name = models.CharField(max_length=250, null=False,blank=False)
     plan_description = models.CharField(max_length=250, null=False,blank=False)
-    plan_data = models.JSONField()
+    plan_data = models.TextField(null=False,blank=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)

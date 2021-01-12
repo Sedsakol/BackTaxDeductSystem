@@ -6689,7 +6689,7 @@ class user_tax_predict(View):
                 pts = plan_types()
                 pts.plan_name = plan_name[i]
                 pts.plan_description = plan_description[i]
-                pts.plan_data = json.dumps(plan_data[i], ensure_ascii=False)
+                pts.plan_data = str(json.dumps(plan_data[i], ensure_ascii=False))
                 pts.save()
             pts = plan_types.objects.all().order_by('created')
         
@@ -6700,7 +6700,7 @@ class user_tax_predict(View):
                 'id' : index,
                 'plan_type_name' : p.plan_name,
                 'plan_description' : p.plan_description,
-                'plan_data' : str(p.plan_data)
+                'plan_data' : json.loads(p.plan_data)
             }
             plan_type_list.append(json_obj)
             index += 1
