@@ -6668,23 +6668,28 @@ class user_tax_predict(View):
             plan_description = ["ป้องกันความเสี่ยง1234", "เน้นลงทุน56454", "เน้นเกษียณ56412187"]
             plan_data = [
                 {
-                    "name" : ["ประกันชีวิต","ประกันชีวิตแบบบำนาญ","กองทุน SSF","กองทุน RMF"] ,
-                    "amount" : [100000,50000,25000,25000]
+                    "ประกันชีวิต" : 100000 ,
+                    "ประกันชีวิตแบบบำนาญ" : 50000 ,
+                    "กองทุน SSF" : 25000 ,
+                    "กองทุน RMF" : 25000 
                 },
                 {
-                    "name" : ["ประกันชีวิต","กองทุน SSF","กองทุน RMF"] ,
-                    "amount" : [50000,100000,25000]
+                    "ประกันชีวิต" : 50000 ,
+                    "กองทุน SSF" : 100000 ,
+                    "กองทุน RMF" : 25000
                 },
                 {
-                    "name" : ["ประกันชีวิต","ประกันชีวิตแบบบำนาญ","กองทุน SSF","กองทุน RMF"] ,
-                    "amount" : [25000,50000,25000,100000]
+                    "ประกันชีวิต" : 25000 ,
+                    "ประกันชีวิตแบบบำนาญ" : 50000 ,
+                    "กองทุน SSF" : 25000 ,
+                    "กองทุน RMF" : 100000
                 }
             ]
             for i in range(0,3):
                 pts = plan_types()
                 pts.plan_name = plan_name[i]
                 pts.plan_description = plan_description[i]
-                pts.plan_data = plan_data[i]
+                pts.plan_data = json.dump(plan_data[i], ensure_ascii=False) 
                 pts.save()
             pts = plan_types.objects.all().order_by('created')
         
