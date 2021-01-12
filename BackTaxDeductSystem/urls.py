@@ -28,6 +28,7 @@ urlpatterns = [
     path('tax/',views.cal_tax.as_view()),
     path('facebook_login/',views.facebook_login.as_view()),
     path('delete_account/',views.delete_user.as_view()),
-    path('categories/',views.categories.as_view())
+    path('categories/',views.categories.as_view()),
+    path('plan_types/',views.user_tax_predict.as_view())
 
 ]

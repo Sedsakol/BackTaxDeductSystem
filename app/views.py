@@ -9,7 +9,7 @@ import json
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from .models import member_profile,User,stair_step,facebook_categories
+from .models import member_profile,User,stair_step,facebook_categories,plan_types
 import jwt
 from datetime import date,datetime
 from django.http import HttpResponse
@@ -6651,4 +6651,73 @@ class categories(View):
         return JsonResponse({'status':'200','msg':'OK'})
         
 
+@method_decorator(csrf_exempt, name='dispatch')
+class user_tax_predict(View):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request, *args, **kwargs):
+        token = request.META['HTTP_AUTHORIZATION']
+        decodedPayload = jwt.decode(token,None,None)
+        print(decodedPayload)
+        print(request.body)
+        email = decodedPayload.get('email')
 
+        #return plan_type_all
+        pts = plan_types.objects.all().order_by('created')
+        if len(pts) == 0:
+            plan_name = ['ป้องกันความเสี่ยง','เน้นลงทุน','เน้นเกษียณ']
+            plan_description = ['ป้องกันความเสี่ยง1234','เน้นลงทุน56454','เน้นเกษียณ56412187']
+            plan_data = [
+                {
+                    'ประกันชีวิต' : 100000,
+                    'ประกันชีวิตแบบบำนาญ' : 50000,
+                    'กองทุน SSF' : 25000,
+                    'กองทุน RMF' : 25000
+                },
+                {
+                    'ประกันชีวิต' : 50000,
+                    'กองทุน SSF' : 100000,
+                    'กองทุน RMF' : 25000
+                },
+                {
+                    'ประกันชีวิต' : 25000,
+                    'ประกันชีวิตแบบบำนาญ' : 50000,
+                    'กองทุน SSF' : 25000,
+                    'กองทุน RMF' : 100000
+                }
+            ]
+            for i in range(0,3):
+                pts = plan_types()
+                pts.plan_name = plan_name[i]
+                pts.plan_description = plan_description[i]
+                pts.plan_data = plan_data[i]
+                pts.save()
+            pts = plan_types.objects.all().order_by('created')
+        
+        plan_type_list = []
+        index = 1
+        for p in pts:
+            json_obj = {
+                'id' : index,
+                'plan_type_name' : p.plan_name,
+                'plan_description' : p.plan_description,
+                'plan_data' : p.plan_data
+            }
+            plan_type_list.append(json_obj)
+            index += 1
+
+
+        return JsonResponse({'status':'200', 'plan_type_list' : plan_type_list})
+        
+    def post(self, request, *args, **kwargs):
+        token = request.META['HTTP_AUTHORIZATION']
+        decodedPayload = jwt.decode(token,None,None)
+        print(decodedPayload)
+        print(request.body)
+        email = decodedPayload.get('email')
+        
+        #ml part
+        plan_type = 1
+
+        return JsonResponse({'status':'200','email': email , 'plan_type' : plan_type})
+
+        

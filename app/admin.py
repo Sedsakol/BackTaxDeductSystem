@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User,member_profile,stair_step,fund_type,fund_list,insurance_list,insurance_type,facebook_categories
+from .models import User,member_profile,stair_step,fund_type,fund_list,insurance_list,insurance_type,facebook_categories,plan_types
 from django.contrib.auth import get_user_model
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -123,3 +123,9 @@ class facebook_categoriesAdmin(admin.ModelAdmin):
     ordering = ('created',)
 
 admin.site.register(facebook_categories,facebook_categoriesAdmin)
+
+class plan_typesAdmin(admin.ModelAdmin):
+    list_display = ('created','last_updated','plan_name','plan_description','plan_data')
+    ordering = ('created',)
+
+admin.site.register(plan_types,plan_typesAdmin)
