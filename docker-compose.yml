@@ -32,7 +32,6 @@ services:
     phpmyadmin:
       image: phpmyadmin/phpmyadmin
       container_name: phpmyadmin
-      restart: always
       depends_on:
         - db
       ports:
