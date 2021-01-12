@@ -6705,6 +6705,8 @@ class user_tax_predict(View):
             plan_type_list.append(json_obj)
             index += 1
 
+        #debug for heroku
+        sys.stdout.flush()
 
         return JsonResponse({'status':'200', 'plan_type_list' : plan_type_list})
         
