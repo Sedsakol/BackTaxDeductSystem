@@ -6689,7 +6689,7 @@ class user_tax_predict(View):
                 pts = plan_types()
                 pts.plan_name = plan_name[i]
                 pts.plan_description = plan_description[i]
-                pts.plan_data = json.loads(json.dumps(plan_data[i], ensure_ascii=False).encode('utf8'))
+                pts.plan_data = json.dumps(plan_data[i], ensure_ascii=False).encode('utf8')
                 pts.save()
             pts = plan_types.objects.all().order_by('created')
         
