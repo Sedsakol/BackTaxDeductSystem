@@ -95,7 +95,7 @@ def change_ip():
         f.write(temp_all)
         f.close()
 
-        auto_push_git()
+        #auto_push_git()
 
     elif new_ip == old_ip :
         print('public IP address not change')
