@@ -111,6 +111,6 @@ def change_ip():
 # Shut down the scheduler when exiting the app
 #atexit.register(lambda: scheduler.shutdown())
 
-auto_push_git()
-
+#auto_push_git()
+change_ip()
 
