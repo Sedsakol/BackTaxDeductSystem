@@ -498,9 +498,9 @@ class categories(View):
             if prev_date:
                 if self.diff_month(datetime.now(), prev_date[0].created) < 1 :
                     return True 
-            else:
-                facebook_categories(facebook_id = content_id, categories_version = 1, data = json_obj_v1 ).save()
-                facebook_categories(facebook_id = content_id, categories_version = 2, data = json_obj_v2 ).save()
+            
+            facebook_categories(facebook_id = content_id, categories_version = 1, data = json_obj_v1 ).save()
+            facebook_categories(facebook_id = content_id, categories_version = 2, data = json_obj_v2 ).save()
 
             if "data" in content_data:
             
@@ -6729,12 +6729,13 @@ class user_tax_predict(View):
         print(json.loads(request.body))
         email = decodedPayload.get('email')
         content = json.loads(request.body)
-        print(content)
+        
         if not content.get('facebook_id') :
             return JsonResponse({'status':'201','msg': 'for facebook user only'})
         else:
             fc1 = facebook_categories.objects.filter(facebook_id = content.get('facebook_id'),categories_version = 1).order_by('-created')[0]
             fc2 = facebook_categories.objects.filter(facebook_id = content.get('facebook_id'),categories_version = 2).order_by('-created')[0]
+            
             u = User.objects.get(email = email)
             mp = member_profile.objects.get(user = u)
 
