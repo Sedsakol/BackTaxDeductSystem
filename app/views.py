@@ -9,7 +9,7 @@ import json
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from .models import member_profile,User,stair_step,facebook_categories
+from .models import member_profile,User,stair_step,facebook_categories,plan_types
 import jwt
 from datetime import date,datetime
 from django.http import HttpResponse
@@ -48,11 +48,11 @@ class cal_tax(View):
             if money > stair_list[i]:
                 current_stair += 1
         if current_stair == 0 :
-            return 0
+            return 0 , current_stair
         else :
             money -= stair_list[current_stair-1]
             tax = rate[current_stair]/100 * money + dis_money[current_stair-1]
-            return tax
+            return tax , current_stair
 
     def get(self, request, *args, **kwargs):
         return JsonResponse({'status':'403','msg':'Forbidden'})
@@ -193,13 +193,13 @@ class cal_tax(View):
                 else:
                     money -= int(content["edu_donation"])*2
 
-            money_discount = original_money - money + 60000 + money_personal
+            money_discount = original_money - (money + 60000 + money_personal)
 
             if money < 0 :
                 money = 0
-            tax = self.cal_tax_stair(money)
+            tax , current_stair = self.cal_tax_stair(money)
 
-            return JsonResponse({'status':'200','tax': tax ,'net_income' : money ,'personal_allowance' : money_personal,'allowance': money_discount})
+            return JsonResponse({'status':'200','tax': tax ,'net_income' : money ,'personal_allowance' : money_personal,'allowance': money_discount , 'stair' : current_stair})
 
 @method_decorator(csrf_exempt, name='dispatch')
 class user_register(View):
@@ -256,7 +256,8 @@ class user_profile(View):
         if "gender" in content:
             m_p.gender = int(content.get('gender'))
         if "birthdate" in content:
-            m_p.birthdate = datetime.strptime(content.get('birthdate'), '%d/%m/%Y').date()
+            if content.get('birthdate') :
+                m_p.birthdate = datetime.strptime(content.get('birthdate'), '%d/%m/%Y').date()
         if "salary" in content:
             m_p.salary = int(content.get('salary'))
         if "other_income" in content:
@@ -367,8 +368,15 @@ class delete_user(View):
 @method_decorator(csrf_exempt, name='dispatch')
 class categories(View):
 
+    def diff_month(self,d1, d2):
+        return (d1.year - d2.year) * 12 + d1.month - d2.month
+
     def create_facebook_categories(self,content_id = None, content_data = None):
         if content_data and content_id :
+            prev_date = list(facebook_categories.objects.filter(facebook_id = content_id).order_by('-created'))
+            if prev_date:
+                if self.diff_month(datetime.now(), prev_date[0].created) < 1 :
+                    return True 
             if "data" in content_data:
             
                 categorie_all = {
@@ -6632,10 +6640,7 @@ class categories(View):
 
     def post(self, request, *args, **kwargs):
         content = json.loads(request.body)
-        print('\n\n\n***\n')
-        print(content)
-        print('\n***\n\n\n')
-
+        
         if "id" in content and "likes" in content :
             content_id = int(content["id"])
             content_data = content["likes"]
@@ -6648,4 +6653,85 @@ class categories(View):
         return JsonResponse({'status':'200','msg':'OK'})
         
 
+@method_decorator(csrf_exempt, name='dispatch')
+class user_tax_predict(View):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request, *args, **kwargs):
+        token = request.META['HTTP_AUTHORIZATION']
+        decodedPayload = jwt.decode(token,None,None)
+        #print(decodedPayload)
+        #print(request.body)
+        email = decodedPayload.get('email')
 
+        #return plan_type_all
+        pts = plan_types.objects.all().order_by('created')
+        if len(pts) == 0:
+            plan_name = ["ป้องกันความเสี่ยง","เน้นลงทุน","เน้นเกษียณ"]
+            plan_description = ["ป้องกันความเสี่ยง1234", "เน้นลงทุน56454", "เน้นเกษียณ56412187"]
+            plan_data = [
+                {
+                    "ประกันชีวิต" : 100000 ,
+                    "ประกันชีวิตแบบบำนาญ" : 50000 ,
+                    "กองทุน SSF" : 25000 ,
+                    "กองทุน RMF" : 25000 
+                },
+                {
+                    "ประกันชีวิต" : 50000 ,
+                    "กองทุน SSF" : 100000 ,
+                    "กองทุน RMF" : 25000
+                },
+                {
+                    "ประกันชีวิต" : 25000 ,
+                    "ประกันชีวิตแบบบำนาญ" : 50000 ,
+                    "กองทุน SSF" : 25000 ,
+                    "กองทุน RMF" : 100000
+                }
+            ]
+            for i in range(0,3):
+                pts = plan_types()
+                pts.plan_name = plan_name[i]
+                pts.plan_description = plan_description[i]
+                pts.plan_data = str(json.dumps(plan_data[i], ensure_ascii=False))
+                pts.save()
+            pts = plan_types.objects.all().order_by('created')
+        
+        plan_type_list = []
+        index = 1
+        for p in pts:
+            json_obj = {
+                'id' : index,
+                'plan_type_name' : p.plan_name,
+                'plan_description' : p.plan_description,
+                'plan_data' : json.loads(p.plan_data)
+            }
+            plan_type_list.append(json_obj)
+            index += 1
+
+        #debug for heroku
+        sys.stdout.flush()
+
+        return JsonResponse({'status':'200', 'plan_type_list' : plan_type_list})
+        
+    def post(self, request, *args, **kwargs):
+        token = request.META['HTTP_AUTHORIZATION']
+        decodedPayload = jwt.decode(token,None,None)
+        print(decodedPayload)
+        print(json.loads(request.body))
+        email = decodedPayload.get('email')
+        content = json.loads(request.body)
+        if not content.get('facebook_id') :
+            return JsonResponse({'status':'201','msg': 'for facebook user only'})
+        else:
+            fc = facebook_categories.objects.filter(facebook_id = content.get('facebook_id')).order_by('-created')[0]
+            u = User.objects.get(email = email)
+            mp = member_profile.objects.get(user = u)
+
+            #ml part
+            user_plan_type = 1
+
+            #debug for heroku
+            sys.stdout.flush()
+
+            return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type})
+
+        
