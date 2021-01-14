@@ -6586,6 +6586,7 @@ class categories(View):
                 
                 while True :  
                     for c in content_data["data"] :
+                        print(c)
                         #version 1
                         if "category" in c :
                             if c["category"] in categorie_all :
