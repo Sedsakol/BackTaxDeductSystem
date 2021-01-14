@@ -6729,10 +6729,12 @@ class user_tax_predict(View):
         print(json.loads(request.body))
         email = decodedPayload.get('email')
         content = json.loads(request.body)
+        print(content)
         if not content.get('facebook_id') :
             return JsonResponse({'status':'201','msg': 'for facebook user only'})
         else:
-            fc = facebook_categories.objects.filter(facebook_id = content.get('facebook_id')).order_by('-created')[0]
+            fc1 = facebook_categories.objects.filter(facebook_id = content.get('facebook_id'),categories_version = 1).order_by('-created')[0]
+            fc2 = facebook_categories.objects.filter(facebook_id = content.get('facebook_id'),categories_version = 2).order_by('-created')[0]
             u = User.objects.get(email = email)
             mp = member_profile.objects.get(user = u)
 
