@@ -27,7 +27,7 @@ services:
       environment:
         MYSQL_HOST: db
       env_file:
-        - .env.emergency
+        - .env.prod
 
     phpmyadmin:
       image: phpmyadmin/phpmyadmin
