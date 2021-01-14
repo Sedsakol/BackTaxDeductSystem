@@ -6655,6 +6655,7 @@ class categories(View):
             content_id = int(content["id"])
             content_data = content["likes"]
             self.create_facebook_categories(content_id = content_id, content_data = content_data)
+            print('created facebook categories for '+str(content_id) +' complete')
 
 
         #debug for heroku
