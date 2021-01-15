@@ -38,7 +38,7 @@ def auto_push_git():
 
 
 def change_ip():
-    env_dir = ".env.emergency"
+    env_dir = ".env.prod"
     setting_dir = "./BackTaxDeductSystem/settings.py"
 
     new_ip = get('https://api.ipify.org').text
