@@ -6776,7 +6776,7 @@ class categories(View):
             content_id = int(content["id"])
             facebook_categories(facebook_id = content_id, categories_version = 1, data = json_obj_v1 ).save()
             facebook_categories(facebook_id = content_id, categories_version = 2, data = json_obj_v2 ).save()
-
+            print('created facebook categories for '+str(content_id) +' complete but nodata')
         #debug for heroku
         sys.stdout.flush()
 
