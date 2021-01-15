@@ -117,7 +117,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '1234',
         'HOST': os.environ.get("HOST_DB", default='1.4.146.138'),
-        'PORT': os.environ.get("PORT_DB", default='80'),
+        'PORT': os.environ.get("PORT_DB", default='3306'),
         'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
