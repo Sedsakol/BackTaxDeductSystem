@@ -5,7 +5,7 @@ services:
       restart: always
       container_name: TaxDeductSystem_DB_MySQL
       ports:
-        - 80:3306
+        - 3306:3306
       environment: 
         MYSQL_DATABASE: taxdeduct
         MYSQL_USER: root
