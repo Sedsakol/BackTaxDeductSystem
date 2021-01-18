@@ -239,7 +239,7 @@ class user_profile(View):
         'parent_num': m_p.parent_num,
         'child_num' : m_p.child_num,
         'infirm' : m_p.infirm,
-        'risk' : json.loads(str(m_p.risk)),
+        'risk' : json.loads(m_p.risk),
         'facebook_id' : m_p.facebook_id
         })
 
@@ -247,9 +247,9 @@ class user_profile(View):
         token = request.META['HTTP_AUTHORIZATION']
         decodedPayload = jwt.decode(token,None,None)
         print(decodedPayload)
-        print(request.body)
         email = decodedPayload.get('email')
         content = json.loads(request.body)
+        print(content)
         u = User.objects.get(email = email)
         m_p = member_profile.objects.get(user = u)
         
@@ -271,7 +271,7 @@ class user_profile(View):
         if "marriage" in content:
             m_p.marriage = int(content.get('marriage'))
         if "risk" in content:
-            m_p.risk = str(json.loads(content.get('risk')))
+            m_p.risk = str(content.get('risk'))
         if "facebook_id" in content:
             if content.get('facebook_id'):
                 m_p.facebook_id = content.get('facebook_id')
