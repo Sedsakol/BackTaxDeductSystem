@@ -239,7 +239,7 @@ class user_profile(View):
         'parent_num': m_p.parent_num,
         'child_num' : m_p.child_num,
         'infirm' : m_p.infirm,
-        'risk' : m_p.risk,
+        'risk' : json.loads(m_p.risk),
         'facebook_id' : m_p.facebook_id
         })
 
@@ -271,7 +271,7 @@ class user_profile(View):
         if "marriage" in content:
             m_p.marriage = int(content.get('marriage'))
         if "risk" in content:
-            m_p.risk = int(content.get('risk'))
+            m_p.risk = str(json.loads(content.get('risk')))
         if "facebook_id" in content:
             if content.get('facebook_id'):
                 m_p.facebook_id = content.get('facebook_id')
@@ -289,7 +289,7 @@ class user_profile(View):
         'child_num' : m_p.child_num,
         'marriage' : m_p.marriage,
         'infirm' : m_p.infirm,
-        'risk' : m_p.risk,
+        'risk' : json.loads(m_p.risk),
         'facebook_id' : m_p.facebook_id
         }) 
 
