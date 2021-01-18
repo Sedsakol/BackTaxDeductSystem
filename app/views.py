@@ -239,7 +239,7 @@ class user_profile(View):
         'parent_num': m_p.parent_num,
         'child_num' : m_p.child_num,
         'infirm' : m_p.infirm,
-        'risk' : json.loads(m_p.risk),
+        'risk' : json.loads(str(m_p.risk)),
         'facebook_id' : m_p.facebook_id
         })
 
