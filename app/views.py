@@ -280,8 +280,6 @@ class user_profile(View):
 
         u = User.objects.get(email = email)
         m_p = member_profile.objects.get(user = u)
-        print(m_p.risk)
-
 
         return JsonResponse({'email': u.email,
         'gender': m_p.gender,
