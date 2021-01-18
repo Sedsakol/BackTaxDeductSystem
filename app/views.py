@@ -6797,7 +6797,7 @@ class user_tax_predict(View):
         pts = plan_types.objects.all().order_by('created')
         if len(pts) == 0:
             plan_name = ["ป้องกันความเสี่ยง","เน้นลงทุน","เน้นเกษียณ"]
-            plan_description = ["ป้องกันความเสี่ยง1234", "เน้นลงทุน56454", "เน้นเกษียณ56412187"]
+            plan_description = ["ป้องกันความเสี่ยง", "เน้นลงทุน", "เน้นเกษียณ"]
             plan_data = [
                 {
                     "ประกันชีวิต" : 50 ,
