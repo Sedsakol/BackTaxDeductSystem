@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User,member_profile,stair_step,fund_type,fund_list,insurance_list,insurance_type,facebook_categories,plan_types
+from .models import User,member_profile,stair_step,fund_type,fund_list,insurance_list,insurance_type,facebook_categories,plan_types,dataset
 from django.contrib.auth import get_user_model
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -129,3 +129,9 @@ class plan_typesAdmin(admin.ModelAdmin):
     ordering = ('created',)
 
 admin.site.register(plan_types,plan_typesAdmin)
+
+class datasetAdmin(admin.ModelAdmin):
+    list_display = ('created','gender','age','salary','other_income','parent_num','child_num','marriage','infirm','risk_question','risk_type','categories_version','categories_data','ans_type')
+    ordering = ('created',)
+
+admin.site.register(dataset,datasetAdmin)

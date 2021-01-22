@@ -215,10 +215,30 @@ class facebook_categories(models.Model):
     data = models.JSONField()
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
-#class_plan_type
+#plan_type
 class plan_types(models.Model):
     plan_name = models.CharField(max_length=250, null=False,blank=False)
     plan_description = models.CharField(max_length=250, null=False,blank=False)
     plan_data = models.TextField(null=False,blank=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
+
+#dataset
+class dataset(models.Model):
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    gender = models.CharField(max_length=250, null=True,blank=True)
+    age = models.IntegerField(null=True,blank=True)
+    salary = models.IntegerField(null=True,blank=True)
+    other_income = models.IntegerField(null=True,blank=True)
+    parent_num = models.IntegerField(null=True,blank=True)
+    child_num = models.IntegerField(null=True,blank=True)
+    marriage = models.IntegerField(null=True,blank=True)
+    infirm = models.IntegerField(null=True,blank=True)
+    risk_question = models.CharField(max_length=250, null=True,blank=True)
+    risk_type = models.IntegerField(null=True,blank=True)
+    categories_version = models.IntegerField(null=False,blank=False)
+    categories_data = models.JSONField()
+    ans_type = models.IntegerField(null=True,blank=True)
+
+    
+    

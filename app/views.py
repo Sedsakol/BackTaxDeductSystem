@@ -9,7 +9,7 @@ import json
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from .models import member_profile,User,stair_step,facebook_categories,plan_types
+from .models import member_profile,User,stair_step,facebook_categories,plan_types,dataset
 import jwt
 from datetime import date,datetime
 from django.http import HttpResponse
