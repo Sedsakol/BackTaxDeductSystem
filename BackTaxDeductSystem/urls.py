@@ -29,6 +29,7 @@ urlpatterns = [
     path('facebook_login/',views.facebook_login.as_view()),
     path('delete_account/',views.delete_user.as_view()),
     path('categories/',views.categories.as_view()),
-    path('plan_types/',views.user_tax_predict.as_view())
+    path('plan_types/',views.user_tax_predict.as_view()),
+    path('collect_dataset/',views.collect_dataset.as_view())
 
 ]

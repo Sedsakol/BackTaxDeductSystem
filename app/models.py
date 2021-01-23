@@ -226,6 +226,7 @@ class plan_types(models.Model):
 #dataset
 class dataset(models.Model):
     created = models.DateTimeField(auto_now_add=True, editable=False)
+    facebook_id = models.CharField(max_length=250, null=True,blank=True)
     gender = models.CharField(max_length=250, null=True,blank=True)
     age = models.IntegerField(null=True,blank=True)
     salary = models.IntegerField(null=True,blank=True)

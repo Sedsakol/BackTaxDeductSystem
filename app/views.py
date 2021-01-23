@@ -6852,7 +6852,7 @@ class user_tax_predict(View):
         content = json.loads(request.body)
         
         if not content.get('facebook_id') :
-            return JsonResponse({'status':'201','msg': 'for facebook user only'})
+            return JsonResponse({'status':'201','msg': ''})
         else:
             fc1 = facebook_categories.objects.filter(facebook_id = content.get('facebook_id'),categories_version = 1).order_by('-created')[0]
             fc2 = facebook_categories.objects.filter(facebook_id = content.get('facebook_id'),categories_version = 2).order_by('-created')[0]
@@ -6869,3 +6869,90 @@ class user_tax_predict(View):
             return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type})
 
         
+@method_decorator(csrf_exempt, name='dispatch')
+class collect_dataset(View):
+    permission_classes = (IsAuthenticated,)
+    def get(self, request, *args, **kwargs):
+        token = request.META['HTTP_AUTHORIZATION']
+        decodedPayload = jwt.decode(token,None,None)
+        #print(decodedPayload)
+        #print(request.body)
+        email = decodedPayload.get('email')
+        print(email)
+
+        #debug for heroku
+        sys.stdout.flush()
+
+        return JsonResponse({'status':'403','msg':'Forbidden'})
+    
+
+    def cal_risk_type(self,risk):
+        riskarr = ast.literal_eval(risk)
+        score = 0
+        result = 0
+        risk_level = 0
+        
+        for i in range(0,10):
+            score += int(riskarr[i])
+        if score < 15 :
+            risk_level = 1
+            result = 0
+        #15 - 21
+        elif score < 22 :
+            risk_level = 4
+            result = 1
+        #22 - 29 
+        elif score < 30 :
+            risk_level = 5
+            result = 2
+        #30 - 36
+        elif score < 37 :
+            risk_level = 7
+            result = 3
+        # 37++
+        else :
+            risk_level = 8
+            result = 4
+
+        return result
+
+    def post(self, request, *args, **kwargs):
+        token = request.META['HTTP_AUTHORIZATION']
+        decodedPayload = jwt.decode(token,None,None)
+        print(decodedPayload)
+        print(json.loads(request.body))
+        email = decodedPayload.get('email')
+        content = json.loads(request.body)
+
+        #debug for heroku
+        sys.stdout.flush()
+        
+        if not content.get('plan_type') :
+            return JsonResponse({'status':'400','msg':'Error Wrong Format'})
+        else:
+            u = User.objects.get(email = email)
+            m = member_profile.objects.get(User = u)
+            today = date.today()
+            age = today.year - m.birthdate.year - ((today.month, today.day) < (m.birthdate.month, m.birthdate.day))
+
+            for v in range(1,3):
+                fc = facebook_categories.objects.get(facebook_id = m.facebook_id,categories_version = v)
+
+                d = dataset()
+                d.facebook_id = m.facebook_id
+                d.gender = m.gender
+                d.age = age
+                d.salary = m.salary
+                d.other_income = m.other_income
+                d.parent_num = m.parent_num
+                d.child_num = m.child_num
+                d.marriage = m.marriage
+                d.infirm = m.infirm
+                d.risk_question =  m.risk
+                d.risk_type = self.cal_risk_type(m.risk)
+                d.categories_version = v
+                d.categories_data = fc.data
+                d.ans_type = int(content.get('plan_type'))
+                d.save()
+            
+            return JsonResponse({'status':'200','msg': 'save dataset complete' })
