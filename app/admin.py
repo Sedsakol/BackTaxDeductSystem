@@ -131,7 +131,7 @@ class plan_typesAdmin(admin.ModelAdmin):
 admin.site.register(plan_types,plan_typesAdmin)
 
 class datasetAdmin(admin.ModelAdmin):
-    list_display = ('created','gender','age','salary','other_income','parent_num','child_num','marriage','infirm','risk_question','risk_type','categories_version','categories_data','ans_type')
+    list_display = ('created','facebook_id','gender','age','salary','other_income','parent_num','child_num','marriage','infirm','risk_question','risk_type','categories_version','categories_data','ans_type')
     ordering = ('created',)
 
 admin.site.register(dataset,datasetAdmin)
