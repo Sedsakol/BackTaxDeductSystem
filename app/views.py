@@ -6931,7 +6931,7 @@ class collect_dataset(View):
             return JsonResponse({'status':'400','msg':'Error Wrong Format'})
         else:
             u = User.objects.get(email = email)
-            m = member_profile.objects.get(User = u)
+            m = member_profile.objects.get(user = u)
             today = date.today()
             age = today.year - m.birthdate.year - ((today.month, today.day) < (m.birthdate.month, m.birthdate.day))
 
