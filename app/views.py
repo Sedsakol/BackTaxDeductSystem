@@ -6936,7 +6936,7 @@ class collect_dataset(View):
             age = today.year - m.birthdate.year - ((today.month, today.day) < (m.birthdate.month, m.birthdate.day))
 
             for v in range(1,3):
-                fc = facebook_categories.objects.get(facebook_id = m.facebook_id,categories_version = v)
+                fc = facebook_categories.objects.filter(facebook_id = m.facebook_id,categories_version = v).order_by('-created')[0]
 
                 d = dataset()
                 d.facebook_id = m.facebook_id
