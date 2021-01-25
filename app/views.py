@@ -231,6 +231,10 @@ class user_profile(View):
         email = decodedPayload.get('email')
         u = User.objects.get(email = email)
         m_p = member_profile.objects.get(user = u)
+
+        risk = None
+        if m_p.risk :
+            risk = ast.literal_eval(m_p.risk)
         
         return JsonResponse({'email': u.email,
         'gender': m_p.gender,
@@ -240,7 +244,7 @@ class user_profile(View):
         'parent_num': m_p.parent_num,
         'child_num' : m_p.child_num,
         'infirm' : m_p.infirm,
-        'risk' : ast.literal_eval(m_p.risk),
+        'risk' : risk,
         'facebook_id' : m_p.facebook_id
         })
 
@@ -280,6 +284,9 @@ class user_profile(View):
 
         u = User.objects.get(email = email)
         m_p = member_profile.objects.get(user = u)
+        risk = None
+        if m_p.risk:
+            risk =  ast.literal_eval(m_p.risk)
 
         return JsonResponse({'email': u.email,
         'gender': m_p.gender,
@@ -290,7 +297,7 @@ class user_profile(View):
         'child_num' : m_p.child_num,
         'marriage' : m_p.marriage,
         'infirm' : m_p.infirm,
-        'risk' : ast.literal_eval(m_p.risk),
+        'risk' : risk ,
         'facebook_id' : m_p.facebook_id
         }) 
 
