@@ -1,7 +1,7 @@
 from requests import get
-import atexit
-from apscheduler.schedulers.blocking import BlockingScheduler
-import git
+#import atexit
+#from apscheduler.schedulers.blocking import BlockingScheduler
+#import git
 
 def auto_push_git():
     PATH_OF_GIT_REPO = '.' 
