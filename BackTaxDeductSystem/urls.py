@@ -31,5 +31,4 @@ urlpatterns = [
     path('categories/',views.categories.as_view()),
     path('plan_types/',views.user_tax_predict.as_view()),
     path('collect_dataset/',views.collect_dataset.as_view())
-
 ]

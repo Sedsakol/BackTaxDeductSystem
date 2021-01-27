@@ -16,7 +16,6 @@ from django.http import HttpResponse
 import os
 import sys
 import requests
-import ast
 
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
@@ -234,7 +233,7 @@ class user_profile(View):
 
         risk = None
         if m_p.risk :
-            risk = ast.literal_eval(m_p.risk)
+            risk = json.loads(m_p.risk)
         
         return JsonResponse({'email': u.email,
         'gender': m_p.gender,
@@ -286,7 +285,7 @@ class user_profile(View):
         m_p = member_profile.objects.get(user = u)
         risk = None
         if m_p.risk:
-            risk =  ast.literal_eval(m_p.risk)
+            risk =  json.loads(m_p.risk)
 
         return JsonResponse({'email': u.email,
         'gender': m_p.gender,
@@ -6894,13 +6893,16 @@ class collect_dataset(View):
     
 
     def cal_risk_type(self,risk):
-        riskarr = ast.literal_eval(risk)
+        riskarr = json.loads(risk)
         score = 0
         result = 0
         risk_level = 0
         
         for i in range(0,10):
-            score += int(riskarr[i])
+            if i != 3 :
+                score += int(riskarr[i])
+            else:
+                score += len(riskarr[i])
         if score < 15 :
             risk_level = 1
             result = 0
@@ -6956,7 +6958,7 @@ class collect_dataset(View):
                 d.marriage = m.marriage
                 d.infirm = m.infirm
                 d.risk_question =  m.risk
-                d.risk_type = self.cal_risk_type(m.risk)
+                d.risk_type = self.cal_risk_type(m.risk)  #m.risk is string
                 d.categories_version = v
                 d.categories_data = fc.data
                 d.ans_type = int(content.get('plan_type'))
