@@ -6622,6 +6622,8 @@ class categories(View):
                                             temp_v2.append(cat_key)
                                 for cl_select in temp_v2:
                                     json_obj_v2[cl_select] += 1
+                    else:
+                        print(content_data)
                             
                     #get next data
                     next_data_url = None
@@ -6630,7 +6632,6 @@ class categories(View):
                             next_data_url = content_data["paging"]["next"]
                     else:
                         print('Error format in create_facebook_categories')
-                        print(content_data)
                         return False
                         break
 
