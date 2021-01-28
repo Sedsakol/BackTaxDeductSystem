@@ -6596,31 +6596,32 @@ class categories(View):
                 json_obj_v2 = json_obj_v1.copy()
 
                 while True :  
-                    for c in content_data["data"] :
-                        #version 1
-                        if "category" in c :
-                            if c["category"] in categorie_all :
-                                cat_key = c["category"]
-                                cat = categorie_all[cat_key]
-                                while cat["level"] > 1 :
-                                    cat_key = cat["parent"]
-                                    cat = categorie_all[cat_key]
-                                if cat_key in json_obj_v1:
-                                    json_obj_v1[cat_key] += 1
-                        #version2
-                        if "category_list" in c :
-                            temp_v2 = []
-                            for cl in c["category_list"]:
-                                if cl["name"] in categorie_all :
-                                    cat_key = cl["name"]
+                    if "data" in content_data:
+                        for c in content_data["data"] :
+                            #version 1
+                            if "category" in c :
+                                if c["category"] in categorie_all :
+                                    cat_key = c["category"]
                                     cat = categorie_all[cat_key]
                                     while cat["level"] > 1 :
                                         cat_key = cat["parent"]
                                         cat = categorie_all[cat_key]
-                                    if cat_key in json_obj_v2 and cat_key not in temp_v2:
-                                        temp_v2.append(cat_key)
-                            for cl_select in temp_v2:
-                                json_obj_v2[cl_select] += 1
+                                    if cat_key in json_obj_v1:
+                                        json_obj_v1[cat_key] += 1
+                            #version2
+                            if "category_list" in c :
+                                temp_v2 = []
+                                for cl in c["category_list"]:
+                                    if cl["name"] in categorie_all :
+                                        cat_key = cl["name"]
+                                        cat = categorie_all[cat_key]
+                                        while cat["level"] > 1 :
+                                            cat_key = cat["parent"]
+                                            cat = categorie_all[cat_key]
+                                        if cat_key in json_obj_v2 and cat_key not in temp_v2:
+                                            temp_v2.append(cat_key)
+                                for cl_select in temp_v2:
+                                    json_obj_v2[cl_select] += 1
                             
                     #get next data
                     next_data_url = None
@@ -6629,6 +6630,7 @@ class categories(View):
                             next_data_url = content_data["paging"]["next"]
                     else:
                         print('Error format in create_facebook_categories')
+                        print(content_data)
                         return False
                         break
 
