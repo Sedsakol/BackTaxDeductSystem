@@ -6637,7 +6637,7 @@ class categories(View):
                         facebook_categories(facebook_id = content_id, categories_version = 1, data = json_obj_v1 ).save()
                         facebook_categories(facebook_id = content_id, categories_version = 2, data = json_obj_v2 ).save()
 
-                        return false
+                        return False
                         break
 
                     if next_data_url :
