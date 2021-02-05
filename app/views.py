@@ -335,8 +335,9 @@ class facebook_login(View):
                     if "gender" in content:
                         m_p.gender = int(content["gender"])
                     if "birthdate" in content:
-                        birthday = datetime.strptime(content["birthdate"], '%d/%m/%Y').date()
-                        m_p.birthdate = birthday
+                        if content["birthdate"] :
+                            birthday = datetime.strptime(content["birthdate"], '%d/%m/%Y').date()
+                            m_p.birthdate = birthday
                     m_p.facebook_id = content["facebook_id"]
                     m_p.save()
                     #return msg use login auth
@@ -6630,10 +6631,9 @@ class categories(View):
                     if "paging" in content_data:
                         if "next" in content_data["paging"] :
                             next_data_url = content_data["paging"]["next"]
+                            print('pull data content')
                     else:
                         print('Error format in create_facebook_categories')
-                        return False
-                        break
 
                     if next_data_url :
                         r = requests.get(next_data_url)
