@@ -6634,6 +6634,11 @@ class categories(View):
                             print('pull data content')
                     else:
                         print('Error format in create_facebook_categories')
+                        facebook_categories(facebook_id = content_id, categories_version = 1, data = json_obj_v1 ).save()
+                        facebook_categories(facebook_id = content_id, categories_version = 2, data = json_obj_v2 ).save()
+
+                        return false
+                        break
 
                     if next_data_url :
                         r = requests.get(next_data_url)
