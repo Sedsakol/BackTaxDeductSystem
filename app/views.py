@@ -242,6 +242,7 @@ class user_profile(View):
         'other_income': m_p.other_income,
         'parent_num': m_p.parent_num,
         'child_num' : m_p.child_num,
+        'marriage' : m_p.marriage,
         'infirm' : m_p.infirm,
         'risk' : risk,
         'facebook_id' : m_p.facebook_id
