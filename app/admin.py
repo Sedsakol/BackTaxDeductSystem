@@ -4,7 +4,8 @@ from django.contrib.auth import get_user_model
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-
+from django.http import HttpResponse
+import csv
 # Register your models here.
 
 admin.site.site_header = "TaxDeduct Admin DBMS"
@@ -83,6 +84,25 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(User, UserAdmin)
 
+class ExportCsvMixin:
+    def export_as_csv(self, request, queryset):
+
+        meta = self.model._meta
+        field_names = [field.name for field in meta.fields]
+
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename={}.csv'.format(meta)
+        writer = csv.writer(response)
+
+        writer.writerow(field_names)
+        for obj in queryset:
+            row = writer.writerow([getattr(obj, field) for field in field_names])
+
+        return response
+
+    export_as_csv.short_description = "Export to CSV Selected"
+
+
 class member_profileAdmin(admin.ModelAdmin):
     list_display = ('created','last_updated','user','gender','birthdate','salary','other_income','marriage','parent_num','child_num','infirm','facebook_id','risk')
     ordering = ('id',)
@@ -133,5 +153,6 @@ admin.site.register(plan_types,plan_typesAdmin)
 class datasetAdmin(admin.ModelAdmin):
     list_display = ('created','facebook_id','gender','age','salary','other_income','parent_num','child_num','marriage','infirm','risk_question','risk_type','categories_version','categories_data','ans_type')
     ordering = ('created',)
+    actions = ["export_as_csv"]
 
 admin.site.register(dataset,datasetAdmin)
