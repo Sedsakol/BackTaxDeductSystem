@@ -150,7 +150,7 @@ class plan_typesAdmin(admin.ModelAdmin):
 
 admin.site.register(plan_types,plan_typesAdmin)
 
-class datasetAdmin(admin.ModelAdmin):
+class datasetAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_display = ('created','facebook_id','gender','age','salary','other_income','parent_num','child_num','marriage','infirm','risk_question','risk_type','categories_version','categories_data','ans_type')
     ordering = ('created',)
     actions = ["export_as_csv"]
