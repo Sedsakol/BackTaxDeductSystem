@@ -41,6 +41,8 @@ def change_ip():
     env_dir = ".env.prod"
     setting_dir = "./BackTaxDeductSystem/settings.py"
 
+    # send 2 รอบกัน server sleep
+    new_ip = get('https://api.ipify.org').text
     new_ip = get('https://api.ipify.org').text
     print('My public IP address is: {}'.format(new_ip))
 
