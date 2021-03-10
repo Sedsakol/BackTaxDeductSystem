@@ -116,7 +116,7 @@ DATABASES = {
         'NAME': 'taxdeduct',
         'USER': 'root',
         'PASSWORD': '1234',
-        'HOST': os.environ.get("HOST_DB", default='1.2.208.144),
+        'HOST': os.environ.get("HOST_DB", default='1.2.208.144'),
         'PORT': os.environ.get("PORT_DB", default='3306'),
         'OPTIONS': {'charset': 'utf8mb4'},
     }
