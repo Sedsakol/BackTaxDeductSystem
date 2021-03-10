@@ -27,32 +27,7 @@ SECRET_KEY = 'w1*eww-u*ua2m3u$wak6w-oe5&ks($z+&w@twe-&7j3rum)!ne'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','1.2.208.144
-	<html>
-	  <head>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta charset="utf-8">
-		<title>Application Error</title>
-		<style media="screen">
-		  html,body,iframe {
-			margin: 0;
-			padding: 0;
-		  }
-		  html,body {
-			height: 100%;
-			overflow: hidden;
-		  }
-		  iframe {
-			width: 100%;
-			height: 100%;
-			border: 0;
-		  }
-		</style>
-	  </head>
-	  <body>
-		<iframe src="//www.herokucdn.com/error-pages/application-error.html"></iframe>
-	  </body>
-	</html>','[::1]','taxdeduct.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','1.2.208.144','[::1]','taxdeduct.herokuapp.com']
 
 
 # Application definition
@@ -141,7 +116,7 @@ DATABASES = {
         'NAME': 'taxdeduct',
         'USER': 'root',
         'PASSWORD': '1234',
-        'HOST': os.environ.get("HOST_DB", default='1.2.208.144,
+        'HOST': os.environ.get("HOST_DB", default='1.2.208.144),
         'PORT': os.environ.get("PORT_DB", default='3306'),
         'OPTIONS': {'charset': 'utf8mb4'},
     }
