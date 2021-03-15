@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin , Group
 from django.utils import timezone
+from solo.models import SingletonModel
 
 # Create your models here.
 
@@ -243,5 +244,32 @@ class dataset(models.Model):
     categories_data = models.JSONField()
     ans_type = models.IntegerField(null=True,blank=True)
 
-    
-    
+class predict_dataset(models.Model):
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    facebook_id = models.CharField(max_length=250, null=True,blank=True)
+    gender = models.CharField(max_length=250, null=True,blank=True)
+    age = models.IntegerField(null=True,blank=True)
+    salary = models.IntegerField(null=True,blank=True)
+    other_income = models.IntegerField(null=True,blank=True)
+    parent_num = models.IntegerField(null=True,blank=True)
+    child_num = models.IntegerField(null=True,blank=True)
+    marriage = models.IntegerField(null=True,blank=True)
+    infirm = models.IntegerField(null=True,blank=True)
+    risk_question = models.CharField(max_length=250, null=True,blank=True)
+    risk_type = models.IntegerField(null=True,blank=True)
+    categories_version = models.IntegerField(null=False,blank=False)
+    categories_data = models.JSONField()
+    predict_ans_type = models.IntegerField(null=True,blank=True)
+
+class MLConfiguration(SingletonModel):
+    ml_file_name = models.CharField(max_length=255, default='sklearn_model.sav', help_text='example : sklearn_model.sav')
+    categories_version = models.IntegerField(default=1)
+    drop_features = models.TextField(null=True, blank=True, default="['Art', 'Band', 'Chef', 'Mood', 'Show', 'Actor', 'Cause', 'Color', 'Event', 'Gamer', 'Legal', 'Topic', 'Author', 'Course', 'Dancer', 'Editor', 'Sports', 'Athlete', 'Cuisine', 'Finance', 'Profile', 'Science', 'Comedian', 'Designer', 'Diseases', 'Election', 'Fan Page', 'Language', 'Locality', 'Musician', 'Producer', 'Orchestra', 'Residence', 'Scientist', 'Surgeries', 'Journalist', 'Agriculture', 'Labor Union', 'Nationality', 'Real Estate', 'Social Club', 'Sports Club', 'Visual Arts', 'Work Status', 'Armed Forces', 'Concert Tour', 'Entrepreneur', 'Meeting Room', 'Talent Agent', 'Ticket Sales', 'Work Project', 'Fashion Model', 'Film Director', 'Fitness Model', 'Literary Arts', 'Public Toilet', 'Satire/Parody', 'Sports Season', 'Work Position', 'Not a Business', 'Campus Building', 'Digital Creator', 'Harmonized Page', 'Hotel & Lodging', 'Performance Art', 'Performing Arts', 'Sports Promoter', 'Theatrical Play', 'Exchange Program', 'Medical & Health', 'News Personality', 'Spiritual Leader', 'Community Service', 'Editorial/Opinion', 'University (NCES)', 'University Status', 'Outdoor Recreation', 'Youth Organization', 'City Infrastructure', 'Charity Organization', 'Motivational Speaker', 'Private Members Club', 'Advertising/Marketing', 'Sorority & Fraternity', 'Religious Organization', 'Theatrical Productions', 'Commercial & Industrial', 'Travel & Transportation', 'Country Club / Clubhouse', 'Media Restoration Service', 'Religious Place of Worship', 'Automotive, Aircraft & Boat', 'Landmark & Historical Place', 'Public & Government Service', 'Automated Teller Machine (ATM)', 'Beauty, Cosmetic & Personal Care', 'Non-Governmental Organization (NGO)', 'Environmental Conservation Organization']" ,
+                                    help_text="example : ['Art', 'Band', 'Chef', 'Mood', 'Show', 'Actor', 'Cause', 'Color', 'Event', 'Gamer', 'Legal', 'Topic', 'Author', 'Course', 'Dancer', 'Editor', 'Sports', 'Athlete', 'Cuisine', 'Finance', 'Profile', 'Science', 'Comedian', 'Designer', 'Diseases', 'Election', 'Fan Page', 'Language', 'Locality', 'Musician', 'Producer', 'Orchestra', 'Residence', 'Scientist', 'Surgeries', 'Journalist', 'Agriculture', 'Labor Union', 'Nationality', 'Real Estate', 'Social Club', 'Sports Club', 'Visual Arts', 'Work Status', 'Armed Forces', 'Concert Tour', 'Entrepreneur', 'Meeting Room', 'Talent Agent', 'Ticket Sales', 'Work Project', 'Fashion Model', 'Film Director', 'Fitness Model', 'Literary Arts', 'Public Toilet', 'Satire/Parody', 'Sports Season', 'Work Position', 'Not a Business', 'Campus Building', 'Digital Creator', 'Harmonized Page', 'Hotel & Lodging', 'Performance Art', 'Performing Arts', 'Sports Promoter', 'Theatrical Play', 'Exchange Program', 'Medical & Health', 'News Personality', 'Spiritual Leader', 'Community Service', 'Editorial/Opinion', 'University (NCES)', 'University Status', 'Outdoor Recreation', 'Youth Organization', 'City Infrastructure', 'Charity Organization', 'Motivational Speaker', 'Private Members Club', 'Advertising/Marketing', 'Sorority & Fraternity', 'Religious Organization', 'Theatrical Productions', 'Commercial & Industrial', 'Travel & Transportation', 'Country Club / Clubhouse', 'Media Restoration Service', 'Religious Place of Worship', 'Automotive, Aircraft & Boat', 'Landmark & Historical Place', 'Public & Government Service', 'Automated Teller Machine (ATM)', 'Beauty, Cosmetic & Personal Care', 'Non-Governmental Organization (NGO)', 'Environmental Conservation Organization']"
+                                    )
+
+    def __str__(self):
+        return "Machine Learning Configuration"
+
+    class Meta:
+        verbose_name = "Machine Learning Configuration"

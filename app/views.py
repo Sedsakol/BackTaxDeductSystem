@@ -8,7 +8,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from .models import member_profile,User,stair_step,facebook_categories,plan_types,dataset
+from .models import member_profile,User,stair_step,facebook_categories,plan_types,dataset,MLConfiguration,predict_dataset
 import jwt
 from datetime import date,datetime
 from django.http import HttpResponse
@@ -6878,11 +6878,13 @@ class user_tax_predict(View):
             #ml part
             user_plan_type = 1
             try:
-                categories_version = 2 #เพิ่ม model
-                filename = 'ML\sklearn_model.sav' #เพิ่ม model
+                ml_config = MLConfiguration.get_solo()
+                categories_version = ml_config.categories_version
+                filename = f'ML\{ml_config.ml_file_name}'
 
                 today = date.today()
                 age = today.year - mp.birthdate.year - ((today.month, today.day) < (mp.birthdate.month, mp.birthdate.day))
+                fc = facebook_categories.objects.filter(facebook_id=content.get('facebook_id'), categories_version=categories_version).order_by('-created').first()
 
                 clf = joblib.load(filename)
                 data = [{
@@ -6896,14 +6898,29 @@ class user_tax_predict(View):
                         'infirm' : mp.infirm,
                         'risk_question' : mp.risk,
                         'risk_type' : cal_risk_type(mp.risk),
-                        'categories_data' : facebook_categories.objects.filter(facebook_id=content.get('facebook_id'), categories_version=categories_version).order_by('-created').first()
+                        'categories_data' : fc
                     }]
 
                 df = preprocess_data_to_ml(data)
-                print(len(df.columns))
-                print(df.columns)
                 user_plan_type = clf.predict(df)[0]
                 print(f'user_plan_type : {user_plan_type}')
+
+                predict_data = predict_dataset()
+                predict_data.facebook_id = mp.facebook_id
+                predict_data.gender = mp.gender
+                predict_data.age = age
+                predict_data.salary = mp.salary
+                predict_data.other_income = mp.other_income
+                predict_data.parent_num = mp.parent_num
+                predict_data.child_num = mp.child_num
+                predict_data.marriage = mp.marriage
+                predict_data.infirm = mp.infirm
+                predict_data.risk_question =  mp.risk
+                predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
+                predict_data.categories_version = categories_version
+                predict_data.categories_data = fc.data
+                predict_data.predict_ans_type = user_plan_type
+                predict_data.save()
                 
             except:
                 print('load model fail.')
@@ -7094,8 +7111,8 @@ def preprocess_data_to_ml(data):
     for i in range(1,11):
         drop_list.append(f'risk_question_{i}')
     
-    #เพิ่ม model
-    drop_list_2 = ['Art', 'Band', 'Chef', 'Mood', 'Show', 'Actor', 'Cause', 'Color', 'Event', 'Gamer', 'Legal', 'Topic', 'Author', 'Course', 'Dancer', 'Editor', 'Sports', 'Athlete', 'Cuisine', 'Finance', 'Profile', 'Science', 'Comedian', 'Designer', 'Diseases', 'Election', 'Fan Page', 'Language', 'Locality', 'Musician', 'Producer', 'Orchestra', 'Residence', 'Scientist', 'Surgeries', 'Journalist', 'Agriculture', 'Labor Union', 'Nationality', 'Real Estate', 'Social Club', 'Sports Club', 'Visual Arts', 'Work Status', 'Armed Forces', 'Concert Tour', 'Entrepreneur', 'Meeting Room', 'Talent Agent', 'Ticket Sales', 'Work Project', 'Fashion Model', 'Film Director', 'Fitness Model', 'Literary Arts', 'Public Toilet', 'Satire/Parody', 'Sports Season', 'Work Position', 'Not a Business', 'Campus Building', 'Digital Creator', 'Harmonized Page', 'Hotel & Lodging', 'Performance Art', 'Performing Arts', 'Sports Promoter', 'Theatrical Play', 'Exchange Program', 'Medical & Health', 'News Personality', 'Spiritual Leader', 'Community Service', 'Editorial/Opinion', 'University (NCES)', 'University Status', 'Outdoor Recreation', 'Youth Organization', 'City Infrastructure', 'Charity Organization', 'Motivational Speaker', 'Private Members Club', 'Advertising/Marketing', 'Sorority & Fraternity', 'Religious Organization', 'Theatrical Productions', 'Commercial & Industrial', 'Travel & Transportation', 'Country Club / Clubhouse', 'Media Restoration Service', 'Religious Place of Worship', 'Automotive, Aircraft & Boat', 'Landmark & Historical Place', 'Public & Government Service', 'Automated Teller Machine (ATM)', 'Beauty, Cosmetic & Personal Care', 'Non-Governmental Organization (NGO)', 'Environmental Conservation Organization']
+    ml_config = MLConfiguration.get_solo()
+    drop_list_2 = ml_config.drop_features
     drop_list.extend(drop_list_2)
     df.drop(drop_list, axis=1, inplace=True)
 
