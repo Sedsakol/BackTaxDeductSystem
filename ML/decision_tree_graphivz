@@ -1,0 +1,37 @@
+digraph Tree {
+node [shape=box, style="filled, rounded", color="black", fontname=helvetica] ;
+edge [fontname=helvetica] ;
+0 [label="risk_type <= 1.5\nentropy = 1.585\nsamples = 26\nvalue = [8.667, 8.667, 8.667]\nclass = เน้นป้องกันความเสี่ยง", fillcolor="#ffffff"] ;
+1 [label="risk_question_3_2 <= 0.5\nentropy = 0.918\nsamples = 6\nvalue = [4.952, 0.0, 2.476]\nclass = เน้นป้องกันความเสี่ยง", fillcolor="#f2c09c"] ;
+0 -> 1 [labeldistance=2.5, labelangle=45, headlabel="True"] ;
+5 [label="entropy = 0.0\nsamples = 4\nvalue = [4.952, 0.0, 0.0]\nclass = เน้นป้องกันความเสี่ยง", fillcolor="#e58139"] ;
+1 -> 5 ;
+6 [label="entropy = 0.0\nsamples = 2\nvalue = [0.0, 0.0, 2.476]\nclass = เน้นเกษียณ", fillcolor="#8139e5"] ;
+1 -> 6 ;
+2 [label="risk_question_5_3 <= 0.5\nentropy = 1.506\nsamples = 20\nvalue = [3.714, 8.667, 6.19]\nclass = เน้นลงทุน", fillcolor="#d7fae6"] ;
+0 -> 2 [labeldistance=2.5, labelangle=-45, headlabel="False"] ;
+3 [label="risk_question_1_4 <= 0.5\nentropy = 1.0\nsamples = 14\nvalue = [0.0, 6.5, 6.19]\nclass = เน้นลงทุน", fillcolor="#f6fef9"] ;
+2 -> 3 ;
+9 [label="entropy = 0.0\nsamples = 3\nvalue = [0.0, 0.0, 3.714]\nclass = เน้นเกษียณ", fillcolor="#8139e5"] ;
+3 -> 9 ;
+10 [label="risk_question_3_1 <= 0.5\nentropy = 0.85\nsamples = 11\nvalue = [0.0, 6.5, 2.476]\nclass = เน้นลงทุน", fillcolor="#84efb1"] ;
+3 -> 10 ;
+11 [label="entropy = 0.0\nsamples = 8\nvalue = [0.0, 5.778, 0.0]\nclass = เน้นลงทุน", fillcolor="#39e581"] ;
+10 -> 11 ;
+12 [label="Finance <= 1.0\nentropy = 0.771\nsamples = 3\nvalue = [0.0, 0.722, 2.476]\nclass = เน้นเกษียณ", fillcolor="#a673ed"] ;
+10 -> 12 ;
+13 [label="entropy = 0.0\nsamples = 1\nvalue = [0.0, 0.722, 0.0]\nclass = เน้นลงทุน", fillcolor="#39e581"] ;
+12 -> 13 ;
+14 [label="entropy = 0.0\nsamples = 2\nvalue = [0.0, 0.0, 2.476]\nclass = เน้นเกษียณ", fillcolor="#8139e5"] ;
+12 -> 14 ;
+4 [label="Musician/Band <= 0.5\nentropy = 0.949\nsamples = 6\nvalue = [3.714, 2.167, 0.0]\nclass = เน้นป้องกันความเสี่ยง", fillcolor="#f4caac"] ;
+2 -> 4 ;
+7 [label="entropy = 0.0\nsamples = 3\nvalue = [0.0, 2.167, 0.0]\nclass = เน้นลงทุน", fillcolor="#39e581"] ;
+4 -> 7 ;
+8 [label="parent_num <= 1.0\nentropy = 0.0\nsamples = 3\nvalue = [3.714, 0.0, 0.0]\nclass = เน้นป้องกันความเสี่ยง", fillcolor="#e58139"] ;
+4 -> 8 ;
+15 [label="entropy = 0.0\nsamples = 1\nvalue = [1.238, 0.0, 0.0]\nclass = เน้นป้องกันความเสี่ยง", fillcolor="#e58139"] ;
+8 -> 15 ;
+16 [label="entropy = 0.0\nsamples = 2\nvalue = [2.476, 0.0, 0.0]\nclass = เน้นป้องกันความเสี่ยง", fillcolor="#e58139"] ;
+8 -> 16 ;
+}

@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
 from rest_framework import permissions
 from django.views import View
-import json
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
@@ -13,9 +12,13 @@ from .models import member_profile,User,stair_step,facebook_categories,plan_type
 import jwt
 from datetime import date,datetime
 from django.http import HttpResponse
+import json
 import os
 import sys
 import requests
+import joblib
+import pandas as pd
+
 
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
@@ -6867,22 +6870,81 @@ class user_tax_predict(View):
         content = json.loads(request.body)
         
         if not content.get('facebook_id') :
-            return JsonResponse({'status':'201','msg': ''})
+            return JsonResponse({'status':'400','msg':'Error Wrong Format'})
         else:
-            fc1 = facebook_categories.objects.filter(facebook_id = content.get('facebook_id'),categories_version = 1).order_by('-created')[0]
-            fc2 = facebook_categories.objects.filter(facebook_id = content.get('facebook_id'),categories_version = 2).order_by('-created')[0]
-            
             u = User.objects.get(email = email)
             mp = member_profile.objects.get(user = u)
-
+            
             #ml part
             user_plan_type = 1
+            try:
+                categories_version = 2 #เพิ่ม model
+                filename = 'ML\sklearn_model.sav' #เพิ่ม model
+
+                today = date.today()
+                age = today.year - mp.birthdate.year - ((today.month, today.day) < (mp.birthdate.month, mp.birthdate.day))
+
+                clf = joblib.load(filename)
+                data = [{
+                        'gender' : mp.gender,
+                        'age' : age,
+                        'salary' : mp.salary,
+                        'other_income' : mp.other_income,
+                        'parent_num' : mp.parent_num,
+                        'child_num' : mp.child_num,
+                        'marriage' : mp.marriage,
+                        'infirm' : mp.infirm,
+                        'risk_question' : mp.risk,
+                        'risk_type' : cal_risk_type(mp.risk),
+                        'categories_data' : facebook_categories.objects.filter(facebook_id=content.get('facebook_id'), categories_version=categories_version).order_by('-created').first()
+                    }]
+
+                df = preprocess_data_to_ml(data)
+                print(len(df.columns))
+                print(df.columns)
+                user_plan_type = clf.predict(df)[0]
+                print(f'user_plan_type : {user_plan_type}')
+                
+            except:
+                print('load model fail.')
 
             #debug for heroku
             sys.stdout.flush()
 
             return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type})
 
+def cal_risk_type(risk):
+    riskarr = json.loads(risk)
+    score = 0
+    result = 0
+    risk_level = 0
+    
+    for i in range(0,10):
+        if i != 3 :
+            score += int(riskarr[i])
+        else:
+            score += len(riskarr[i])
+    if score < 15 :
+        risk_level = 1
+        result = 0
+    #15 - 21
+    elif score < 22 :
+        risk_level = 4
+        result = 1
+    #22 - 29 
+    elif score < 30 :
+        risk_level = 5
+        result = 2
+    #30 - 36
+    elif score < 37 :
+        risk_level = 7
+        result = 3
+    # 37++
+    else :
+        risk_level = 8
+        result = 4
+
+    return result
         
 @method_decorator(csrf_exempt, name='dispatch')
 class collect_dataset(View):
@@ -6899,40 +6961,6 @@ class collect_dataset(View):
         sys.stdout.flush()
 
         return JsonResponse({'status':'403','msg':'Forbidden'})
-    
-
-    def cal_risk_type(self,risk):
-        riskarr = json.loads(risk)
-        score = 0
-        result = 0
-        risk_level = 0
-        
-        for i in range(0,10):
-            if i != 3 :
-                score += int(riskarr[i])
-            else:
-                score += len(riskarr[i])
-        if score < 15 :
-            risk_level = 1
-            result = 0
-        #15 - 21
-        elif score < 22 :
-            risk_level = 4
-            result = 1
-        #22 - 29 
-        elif score < 30 :
-            risk_level = 5
-            result = 2
-        #30 - 36
-        elif score < 37 :
-            risk_level = 7
-            result = 3
-        # 37++
-        else :
-            risk_level = 8
-            result = 4
-
-        return result
 
     def post(self, request, *args, **kwargs):
         token = request.META['HTTP_AUTHORIZATION']
@@ -6954,7 +6982,7 @@ class collect_dataset(View):
             age = today.year - m.birthdate.year - ((today.month, today.day) < (m.birthdate.month, m.birthdate.day))
 
             for v in range(1,3):
-                fc = facebook_categories.objects.filter(facebook_id = m.facebook_id,categories_version = v).order_by('-created')[0]
+                fc = facebook_categories.objects.filter(facebook_id = m.facebook_id,categories_version = v).order_by('-created').first()
 
                 d = dataset()
                 d.facebook_id = m.facebook_id
@@ -6967,10 +6995,108 @@ class collect_dataset(View):
                 d.marriage = m.marriage
                 d.infirm = m.infirm
                 d.risk_question =  m.risk
-                d.risk_type = self.cal_risk_type(m.risk)  #m.risk is string
+                d.risk_type = cal_risk_type(m.risk)  #m.risk is string
                 d.categories_version = v
                 d.categories_data = fc.data
                 d.ans_type = int(content.get('plan_type'))
                 d.save()
             
             return JsonResponse({'status':'200','msg': 'save dataset complete' })
+
+def preprocess_data_to_ml(data):
+    # data = [{
+    #         'gender' : 2,
+    #         'age' : 21,
+    #         'salary' : 20000,
+    #         'other_income' : 60000,
+    #         'parent_num' : 2,
+    #         'child_num' : 0,
+    #         'marriage' : 1,
+    #         'infirm' : 1,
+    #         'risk_question' : "[4, 3, 3, [4, 3, 1], 2, 3, 3, 3, 3, 3]",
+    #         'risk_type' : 3,
+    #         'categories_data' : "{'Art': 0, 'Band': 0, 'Chef': 1, 'Mood': 0, 'Show': 0, 'Actor': 0, 'Brand': 40, 'Cause': 0, 'Color': 0, 'Event': 1, 'Gamer': 1, 'Legal': 0, 'Music': 2, 'Topic': 0, 'Artist': 3, 'Author': 1, 'Course': 0, 'Dancer': 1, 'Editor': 0, 'Sports': 1, 'Writer': 1, 'Athlete': 0, 'Blogger': 1, 'Cuisine': 0, 'Finance': 1, 'Profile': 0, 'Science': 0, 'Comedian': 0, 'Designer': 0, 'Diseases': 0, 'Election': 0, 'Fan Page': 0, 'Language': 0, 'Locality': 0, 'Musician': 0, 'Producer': 0, 'Community': 6, 'Education': 10, 'Orchestra': 0, 'Residence': 0, 'Scientist': 0, 'Surgeries': 0, 'Journalist': 0, 'Agriculture': 0, 'Labor Union': 0, 'Nationality': 0, 'Real Estate': 1, 'Social Club': 0, 'Sports Club': 0, 'TV & Movies': 1, 'Visual Arts': 0, 'Work Status': 0, 'Armed Forces': 0, 'Concert Tour': 0, 'Entrepreneur': 0, 'Just For Fun': 1, 'Meeting Room': 0, 'Talent Agent': 0, 'Ticket Sales': 0, 'Work Project': 0, 'Fashion Model': 0, 'Film Director': 0, 'Fitness Model': 0, 'Literary Arts': 0, 'Local Service': 2, 'Musician/Band': 0, 'Public Toilet': 0, 'Satire/Parody': 0, 'Sports Season': 0, 'Video Creator': 3, 'Work Position': 0, 'Not a Business': 2, 'Campus Building': 1, 'Digital Creator': 0, 'Food & Beverage': 10, 'Harmonized Page': 0, 'Hotel & Lodging': 0, 'Performance Art': 0, 'Performing Arts': 1, 'Sports Promoter': 0, 'Theatrical Play': 0, 'Exchange Program': 0, 'Medical & Health': 0, 'News Personality': 0, 'Spiritual Leader': 0, 'Books & Magazines': 2, 'Community Service': 0, 'Editorial/Opinion': 0, 'Shopping & Retail': 13, 'University (NCES)': 0, 'University Status': 0, 'Media/News Company': 0, 'Outdoor Recreation': 0, 'Youth Organization': 0, 'City Infrastructure': 0, 'Sports & Recreation': 0, 'Arts & Entertainment': 1, 'Charity Organization': 0, 'Motivational Speaker': 0, 'Private Members Club': 0, 'Advertising/Marketing': 0, 'Sorority & Fraternity': 0, 'Nonprofit Organization': 0, 'Religious Organization': 0, 'Theatrical Productions': 0, 'Commercial & Industrial': 0, 'Travel & Transportation': 0, 'Country Club / Clubhouse': 0, 'Media Restoration Service': 0, 'Religious Place of Worship': 0, 'Automotive, Aircraft & Boat': 16, 'Landmark & Historical Place': 0, 'Public & Government Service': 0, 'Automated Teller Machine (ATM)': 0, 'Beauty, Cosmetic & Personal Care': 1, 'Science, Technology & Engineering': 2, 'Non-Governmental Organization (NGO)': 0, 'Environmental Conservation Organization': 0}"
+    #     }]
+
+    df = pd.DataFrame(data=data)
+    temp_list = []
+    for i in df['risk_question']:
+        x = json.loads(i)
+        temp_list.append(x)
+    temp_list 
+    df['risk_question'] = temp_list 
+
+    for i in range(1,11):
+        df[f'risk_question_{i}'] = df['risk_question'].apply(lambda x:x[i-1])
+
+    for i in range(1,5):
+        temp_list = []
+        for j in df['risk_question_4']:
+            if i in j:
+                temp_list.append(1)
+            else:
+                temp_list.append(0)
+        df[f'risk_question_4_{i}'] = temp_list
+        
+    df['gender'] = df['gender'] - 1
+    df['marriage'] = df['marriage'] - 1
+
+    for i in range(1,11):
+        if i != 4:
+            temp_list_1 = []
+            temp_list_2 = []
+            temp_list_3 = []
+            temp_list_4 = []
+            for j in df[f'risk_question_{i}']:
+                if j == 1:
+                    temp_list_1.append(1)
+                    temp_list_2.append(0)
+                    temp_list_3.append(0)
+                    temp_list_4.append(0)
+                elif j == 2:
+                    temp_list_1.append(0)
+                    temp_list_2.append(1)
+                    temp_list_3.append(0)
+                    temp_list_4.append(0)
+                elif j == 3:
+                    temp_list_1.append(0)
+                    temp_list_2.append(0)
+                    temp_list_3.append(1)
+                    temp_list_4.append(0)
+                elif j == 4:
+                    temp_list_1.append(0)
+                    temp_list_2.append(0)
+                    temp_list_3.append(0)
+                    temp_list_4.append(1)
+            df[f'risk_question_{i}_1'] = temp_list_1
+            df[f'risk_question_{i}_2'] = temp_list_2
+            df[f'risk_question_{i}_3'] = temp_list_3
+            df[f'risk_question_{i}_4'] = temp_list_4
+
+    temp_list = []
+    for i in df['categories_data']:
+        x = json.loads(i.replace("'", '"')) 
+        temp_list.append(x)
+    df['categories_data'] = temp_list
+
+    key_list = []
+    for key in df['categories_data'][0].keys():
+        key_list.append(key)
+
+    for key in key_list:
+        df[key] = df['categories_data'].apply(lambda x:x.get(key))
+
+    # drop_list = ['id', 'created', 'facebook_id', 'risk_question','categories_data']
+    drop_list = ['risk_question','categories_data']
+    if True:
+        drop_list.append('infirm')
+
+    for i in range(1,11):
+        drop_list.append(f'risk_question_{i}')
+    
+    #เพิ่ม model
+    drop_list_2 = ['Art', 'Band', 'Chef', 'Mood', 'Show', 'Actor', 'Cause', 'Color', 'Event', 'Gamer', 'Legal', 'Topic', 'Author', 'Course', 'Dancer', 'Editor', 'Sports', 'Athlete', 'Cuisine', 'Finance', 'Profile', 'Science', 'Comedian', 'Designer', 'Diseases', 'Election', 'Fan Page', 'Language', 'Locality', 'Musician', 'Producer', 'Orchestra', 'Residence', 'Scientist', 'Surgeries', 'Journalist', 'Agriculture', 'Labor Union', 'Nationality', 'Real Estate', 'Social Club', 'Sports Club', 'Visual Arts', 'Work Status', 'Armed Forces', 'Concert Tour', 'Entrepreneur', 'Meeting Room', 'Talent Agent', 'Ticket Sales', 'Work Project', 'Fashion Model', 'Film Director', 'Fitness Model', 'Literary Arts', 'Public Toilet', 'Satire/Parody', 'Sports Season', 'Work Position', 'Not a Business', 'Campus Building', 'Digital Creator', 'Harmonized Page', 'Hotel & Lodging', 'Performance Art', 'Performing Arts', 'Sports Promoter', 'Theatrical Play', 'Exchange Program', 'Medical & Health', 'News Personality', 'Spiritual Leader', 'Community Service', 'Editorial/Opinion', 'University (NCES)', 'University Status', 'Outdoor Recreation', 'Youth Organization', 'City Infrastructure', 'Charity Organization', 'Motivational Speaker', 'Private Members Club', 'Advertising/Marketing', 'Sorority & Fraternity', 'Religious Organization', 'Theatrical Productions', 'Commercial & Industrial', 'Travel & Transportation', 'Country Club / Clubhouse', 'Media Restoration Service', 'Religious Place of Worship', 'Automotive, Aircraft & Boat', 'Landmark & Historical Place', 'Public & Government Service', 'Automated Teller Machine (ATM)', 'Beauty, Cosmetic & Personal Care', 'Non-Governmental Organization (NGO)', 'Environmental Conservation Organization']
+    drop_list.extend(drop_list_2)
+    df.drop(drop_list, axis=1, inplace=True)
+
+    return df

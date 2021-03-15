@@ -5,8 +5,20 @@ markdown
 django-filter
 django-cors-headers
 django-allauth
+django-extensions
 
 mysqlclient-1.4.6-cp39-cp39-win_amd64.whl
 
 gunicorn
 whitenoise
+
+#ML
+numpy
+pandas
+seaborn
+matplotlib
+sklearn
+IPython
+graphviz
+catboost
+xgboost
