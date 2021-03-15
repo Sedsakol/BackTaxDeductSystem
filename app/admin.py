@@ -7,6 +7,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.http import HttpResponse
 import csv
 from solo.admin import SingletonModelAdmin
+from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 # Register your models here.
 
 admin.site.site_header = "TaxDeduct Admin DBMS"
@@ -151,6 +152,7 @@ class plan_typesAdmin(admin.ModelAdmin):
 admin.site.register(plan_types,plan_typesAdmin)
 
 class datasetAdmin(admin.ModelAdmin, ExportCsvMixin):
+    list_filter = [('created', DateRangeFilter)]
     list_display = ('created','facebook_id','gender','age','salary','other_income','parent_num','child_num','marriage','infirm','risk_question','risk_type','categories_version','categories_data','ans_type')
     ordering = ('created',)
     actions = ["export_as_csv"]
