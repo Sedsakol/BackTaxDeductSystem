@@ -6919,7 +6919,7 @@ class user_tax_predict(View):
                 predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
                 predict_data.categories_version = categories_version
                 predict_data.categories_data = fc.data
-                predict_data.ans_type = user_plan_type
+                predict_data.predict_ans_type = user_plan_type
                 predict_data.save()
                 
             except:

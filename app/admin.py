@@ -161,7 +161,7 @@ admin.site.register(dataset,datasetAdmin)
 
 class predict_datasetAdmin(admin.ModelAdmin, ExportCsvMixin):
     list_filter = [('created', DateRangeFilter)]
-    list_display = ('created','facebook_id','gender','age','salary','other_income','parent_num','child_num','marriage','infirm','risk_question','risk_type','categories_version','categories_data','ans_type')
+    list_display = ('created','facebook_id','gender','age','salary','other_income','parent_num','child_num','marriage','infirm','risk_question','risk_type','categories_version','categories_data','predict_ans_type')
     ordering = ('created',)
     actions = ["export_as_csv"]
 

@@ -259,7 +259,7 @@ class predict_dataset(models.Model):
     risk_type = models.IntegerField(null=True,blank=True)
     categories_version = models.IntegerField(null=False,blank=False)
     categories_data = models.JSONField()
-    ans_type = models.IntegerField(null=True,blank=True)
+    predict_ans_type = models.IntegerField(null=True,blank=True)
 
 class MLConfiguration(SingletonModel):
     ml_file_name = models.CharField(max_length=255, default='sklearn_model.sav', help_text='example : sklearn_model.sav')
