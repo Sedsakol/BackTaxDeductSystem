@@ -113,3 +113,17 @@ media/
 **/migrations/**
 !**/migrations
 !**/migrations/__init__.py
+
+*.py[co]
+*~
+*.bak
+.ipynb_checkpoints
+
+
+# ms IDE stuff
+*.code-workspace
+.history
+
+ML/categories_version_1
+ML/categories_version_2
+ML/pre_process_format
