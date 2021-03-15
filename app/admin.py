@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User,member_profile,stair_step,fund_type,fund_list,insurance_list,insurance_type,facebook_categories,plan_types,dataset,MLConfiguration
+from .models import User,member_profile,stair_step,fund_type,fund_list,insurance_list,insurance_type,facebook_categories,plan_types,dataset,MLConfiguration,predict_dataset
 from django.contrib.auth import get_user_model
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
@@ -158,5 +158,13 @@ class datasetAdmin(admin.ModelAdmin, ExportCsvMixin):
     actions = ["export_as_csv"]
 
 admin.site.register(dataset,datasetAdmin)
+
+class predict_datasetAdmin(admin.ModelAdmin, ExportCsvMixin):
+    list_filter = [('created', DateRangeFilter)]
+    list_display = ('created','facebook_id','gender','age','salary','other_income','parent_num','child_num','marriage','infirm','risk_question','risk_type','categories_version','categories_data','ans_type')
+    ordering = ('created',)
+    actions = ["export_as_csv"]
+
+admin.site.register(predict_dataset,predict_datasetAdmin)
 
 admin.site.register(MLConfiguration, SingletonModelAdmin)

@@ -244,6 +244,22 @@ class dataset(models.Model):
     categories_data = models.JSONField()
     ans_type = models.IntegerField(null=True,blank=True)
 
+class predict_dataset(models.Model):
+    created = models.DateTimeField(auto_now_add=True, editable=False)
+    facebook_id = models.CharField(max_length=250, null=True,blank=True)
+    gender = models.CharField(max_length=250, null=True,blank=True)
+    age = models.IntegerField(null=True,blank=True)
+    salary = models.IntegerField(null=True,blank=True)
+    other_income = models.IntegerField(null=True,blank=True)
+    parent_num = models.IntegerField(null=True,blank=True)
+    child_num = models.IntegerField(null=True,blank=True)
+    marriage = models.IntegerField(null=True,blank=True)
+    infirm = models.IntegerField(null=True,blank=True)
+    risk_question = models.CharField(max_length=250, null=True,blank=True)
+    risk_type = models.IntegerField(null=True,blank=True)
+    categories_version = models.IntegerField(null=False,blank=False)
+    categories_data = models.JSONField()
+    ans_type = models.IntegerField(null=True,blank=True)
 
 class MLConfiguration(SingletonModel):
     ml_file_name = models.CharField(max_length=255, default='sklearn_model.sav', help_text='example : sklearn_model.sav')

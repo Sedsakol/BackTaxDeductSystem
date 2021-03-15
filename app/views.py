@@ -8,7 +8,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from .models import member_profile,User,stair_step,facebook_categories,plan_types,dataset,MLConfiguration
+from .models import member_profile,User,stair_step,facebook_categories,plan_types,dataset,MLConfiguration,predict_dataset
 import jwt
 from datetime import date,datetime
 from django.http import HttpResponse
@@ -6884,6 +6884,7 @@ class user_tax_predict(View):
 
                 today = date.today()
                 age = today.year - mp.birthdate.year - ((today.month, today.day) < (mp.birthdate.month, mp.birthdate.day))
+                fc = facebook_categories.objects.filter(facebook_id=content.get('facebook_id'), categories_version=categories_version).order_by('-created').first()
 
                 clf = joblib.load(filename)
                 data = [{
@@ -6897,14 +6898,29 @@ class user_tax_predict(View):
                         'infirm' : mp.infirm,
                         'risk_question' : mp.risk,
                         'risk_type' : cal_risk_type(mp.risk),
-                        'categories_data' : facebook_categories.objects.filter(facebook_id=content.get('facebook_id'), categories_version=categories_version).order_by('-created').first()
+                        'categories_data' : fc
                     }]
 
                 df = preprocess_data_to_ml(data)
-                print(len(df.columns))
-                print(df.columns)
                 user_plan_type = clf.predict(df)[0]
                 print(f'user_plan_type : {user_plan_type}')
+
+                predict_data = predict_dataset()
+                predict_data.facebook_id = mp.facebook_id
+                predict_data.gender = mp.gender
+                predict_data.age = age
+                predict_data.salary = mp.salary
+                predict_data.other_income = mp.other_income
+                predict_data.parent_num = mp.parent_num
+                predict_data.child_num = mp.child_num
+                predict_data.marriage = mp.marriage
+                predict_data.infirm = mp.infirm
+                predict_data.risk_question =  mp.risk
+                predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
+                predict_data.categories_version = categories_version
+                predict_data.categories_data = fc.data
+                predict_data.ans_type = user_plan_type
+                predict_data.save()
                 
             except:
                 print('load model fail.')
