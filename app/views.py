@@ -6807,10 +6807,10 @@ class user_tax_predict(View):
     permission_classes = (IsAuthenticated,)
     def get(self, request, *args, **kwargs):
         token = request.META['HTTP_AUTHORIZATION']
-        decodedPayload = jwt.decode(token,None,None)
+        # decodedPayload = jwt.decode(token,None,None)
         #print(decodedPayload)
         #print(request.body)
-        email = decodedPayload.get('email')
+        # email = decodedPayload.get('email')
 
         #return plan_type_all
         pts = plan_types.objects.all().order_by('created')
@@ -6838,6 +6838,7 @@ class user_tax_predict(View):
             ]
             for i in range(0,3):
                 pts = plan_types()
+                pts.type_id = i+1
                 pts.plan_name = plan_name[i]
                 pts.plan_description = plan_description[i]
                 pts.plan_data = str(json.dumps(plan_data[i], ensure_ascii=False))
@@ -6845,16 +6846,14 @@ class user_tax_predict(View):
             pts = plan_types.objects.all().order_by('created')
         
         plan_type_list = []
-        index = 1
         for p in pts:
             json_obj = {
-                'id' : index,
+                'id' : p.type_id,
                 'plan_type_name' : p.plan_name,
                 'plan_description' : p.plan_description,
                 'plan_data' : json.loads(p.plan_data)
             }
             plan_type_list.append(json_obj)
-            index += 1
 
         #debug for heroku
         sys.stdout.flush()
