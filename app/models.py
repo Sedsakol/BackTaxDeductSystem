@@ -180,6 +180,9 @@ class fund_type(models.Model):
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
+    def __str__(self):
+        return f'{self.name}'
+
 class fund_list(models.Model):
     name = models.CharField(max_length=250)
     description = models.CharField(max_length=250)
@@ -194,12 +197,18 @@ class fund_list(models.Model):
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
+    def __str__(self):
+        return f'{self.name}'
+
 #insurance
 class insurance_type(models.Model):
     name = models.CharField(max_length=250)
     description = models.CharField(max_length=250 ,null=True ,blank=True)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __str__(self):
+        return f'{self.name}'
     
 class insurance_list(models.Model):
     name = models.CharField(max_length=250)
@@ -210,6 +219,9 @@ class insurance_list(models.Model):
     active = models.BooleanField(default=True)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
+
+    def __str__(self):
+        return f'{self.name}'
 
 #facebook
 class facebook_categories(models.Model):
@@ -225,6 +237,9 @@ class plan_types(models.Model):
     plan_data = models.TextField(null=False,blank=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
+
+    def __str__(self):
+        return f'Plan Type {self.pk} : {self.plan_name}'
 
 #dataset
 class dataset(models.Model):
