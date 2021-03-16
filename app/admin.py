@@ -134,7 +134,7 @@ class insurance_typeAdmin(admin.ModelAdmin):
 
 admin.site.register(insurance_type,insurance_typeAdmin)
 class insurance_listAdmin(admin.ModelAdmin):
-    list_display = ('created','last_updated','name','description','link','active','public_limited_company')
+    list_display = ('created','last_updated','name','display_name','description','link','active','public_limited_company')
     ordering = ('id',)
 
 admin.site.register(insurance_list,insurance_listAdmin)
@@ -146,7 +146,7 @@ class facebook_categoriesAdmin(admin.ModelAdmin):
 admin.site.register(facebook_categories,facebook_categoriesAdmin)
 
 class plan_typesAdmin(admin.ModelAdmin):
-    list_display = ('created','last_updated','plan_name','plan_description','plan_data')
+    list_display = ('created','last_updated','type_id','plan_name','plan_description','plan_data')
     ordering = ('created',)
 
 admin.site.register(plan_types,plan_typesAdmin)
