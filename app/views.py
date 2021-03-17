@@ -6924,10 +6924,14 @@ class user_tax_predict(View):
             except:
                 print('load model fail.')
 
+            #ดึงข้อมูลใน database
+            fund_list = []
+            insurance_list = []
+
             #debug for heroku
             sys.stdout.flush()
 
-            return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type})
+            return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type, 'fund_list': fund_list, 'insurance_list': insurance_list})
 
 def cal_risk_type(risk):
     riskarr = json.loads(risk)

@@ -20,3 +20,10 @@ $ docker-compose run web python manage.py createsuperuser
     #superuser (run first time only naja)
     user: admin@admin.com
     pass: rootroot
+
+#for generate ER svg
+$ python manage.py graph_models -a > dotfile.dot
+#then go to https://dreampuf.github.io/GraphvizOnline/
+
+#for generate ER png
+$ python manage.py graph_models -a -o er.png

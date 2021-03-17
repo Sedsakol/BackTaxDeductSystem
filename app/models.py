@@ -194,6 +194,9 @@ class fund_list(models.Model):
     dividend_payout = models.BooleanField(default=False)
     asset_management = models.CharField(max_length=250, null=True)
     active = models.BooleanField(default=True)
+    priority = models.IntegerField(default=0)
+    is_ads = models.BooleanField(default=False)
+    
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
@@ -218,6 +221,9 @@ class insurance_list(models.Model):
     link = models.CharField(max_length=250)
     insuranceType = models.ManyToManyField(insurance_type)
     active = models.BooleanField(default=True)
+    priority = models.IntegerField(default=0)
+    is_ads = models.BooleanField(default=False)
+
     last_updated = models.DateTimeField(auto_now=True, editable=False)
     created = models.DateTimeField(auto_now_add=True, editable=False)
 
@@ -234,9 +240,12 @@ class facebook_categories(models.Model):
 #plan_type
 class plan_types(models.Model):
     type_id = models.IntegerField(unique=True)
-    plan_name = models.CharField(max_length=250, null=False,blank=False)
+    plan_name = models.CharField(max_length=250)
     plan_description = models.TextField()
+    related_fund_types = models.ManyToManyField(fund_type)
+    related_insurance_types = models.ManyToManyField(insurance_type)
     plan_data = models.TextField(null=False,blank=False)
+
     created = models.DateTimeField(auto_now_add=True, editable=False)
     last_updated = models.DateTimeField(auto_now=True, editable=False)
 
