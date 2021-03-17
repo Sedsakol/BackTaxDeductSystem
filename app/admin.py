@@ -123,8 +123,8 @@ class fund_typeAdmin(admin.ModelAdmin):
 admin.site.register(fund_type,fund_typeAdmin)
 
 class fund_listAdmin(admin.ModelAdmin):
-    list_display = ('created','last_updated','name','description','start_date','end_date','link','risk','active','dividend_payout','asset_management')
-    ordering = ('id',)
+    list_display = ('created','last_updated','name','description','start_date','end_date','link','risk','active','dividend_payout','asset_management','priority','is_ads')
+    ordering = ('id','priority','is_ads')
 
 admin.site.register(fund_list,fund_listAdmin)
 
@@ -134,8 +134,8 @@ class insurance_typeAdmin(admin.ModelAdmin):
 
 admin.site.register(insurance_type,insurance_typeAdmin)
 class insurance_listAdmin(admin.ModelAdmin):
-    list_display = ('created','last_updated','name','display_name','description','link','active','public_limited_company')
-    ordering = ('id',)
+    list_display = ('created','last_updated','name','display_name','description','link','active','public_limited_company','priority','is_ads')
+    ordering = ('id','priority','is_ads')
 
 admin.site.register(insurance_list,insurance_listAdmin)
 
