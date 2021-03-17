@@ -187,7 +187,7 @@ class fund_list(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField()
     start_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
     link = models.CharField(max_length=250)
     risk = models.IntegerField()
     fundType = models.ManyToManyField(fund_type)
