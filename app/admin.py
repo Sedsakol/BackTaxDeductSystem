@@ -146,7 +146,7 @@ class facebook_categoriesAdmin(admin.ModelAdmin):
 admin.site.register(facebook_categories,facebook_categoriesAdmin)
 
 class plan_typesAdmin(admin.ModelAdmin):
-    list_display = ('created','last_updated','type_id','plan_name','plan_description','plan_data')
+    list_display = ('created','last_updated','type_id','plan_name','plan_description','plan_data','risk_level')
     ordering = ('created',)
 
 admin.site.register(plan_types,plan_typesAdmin)

@@ -27,7 +27,7 @@ SECRET_KEY = 'w1*eww-u*ua2m3u$wak6w-oe5&ks($z+&w@twe-&7j3rum)!ne'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','101.51.79.162','[::1]','taxdeduct.herokuapp.com']
+ALLOWED_HOSTS = ['127.0.0.1','localhost','101.51.78.183','[::1]','taxdeduct.herokuapp.com']
 
 
 # Application definition
@@ -119,7 +119,7 @@ DATABASES = {
         'NAME': 'taxdeduct',
         'USER': 'root',
         'PASSWORD': '1234',
-        'HOST': os.environ.get("HOST_DB", default='101.51.79.162'),
+        'HOST': os.environ.get("HOST_DB", default='101.51.78.183'),
         'PORT': os.environ.get("PORT_DB", default='3306')
     }
 }

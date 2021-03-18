@@ -984,68 +984,74 @@
 <!-- app_models_plan_types -->
 <g id="node22" class="node">
 <title>app_models_plan_types</title>
-<polygon fill="#ffffff" stroke="transparent" points="1384.5,-1015.9 1384.5,-1130.9 1543.5,-1130.9 1543.5,-1015.9 1384.5,-1015.9"/>
-<polygon fill="#1b563f" stroke="transparent" points="1386,-1107.4 1386,-1129.4 1543,-1129.4 1543,-1107.4 1386,-1107.4"/>
-<text text-anchor="start" x="1421.8375" y="-1116.4" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1433.8375" y="-1116.4" font-family="Roboto" font-weight="bold" font-size="10.00" fill="#ffffff">      plan_types      </text>
-<text text-anchor="start" x="1388" y="-1099.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1400" y="-1099.2" font-family="Roboto" font-weight="bold" font-size="8.00" fill="#000000">id</text>
-<text text-anchor="start" x="1406.2232" y="-1099.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1469" y="-1099.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1481" y="-1099.2" font-family="Roboto" font-weight="bold" font-size="8.00" fill="#000000">AutoField</text>
-<text text-anchor="start" x="1513.4432" y="-1099.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1388" y="-1086.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1400" y="-1086.2" font-family="Roboto" font-size="8.00" fill="#7b7b7b">created</text>
-<text text-anchor="start" x="1423.0912" y="-1086.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1468.7848" y="-1086.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1480.7848" y="-1086.2" font-family="Roboto" font-size="8.00" fill="#7b7b7b">DateTimeField</text>
-<text text-anchor="start" x="1529.2152" y="-1086.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1388" y="-1073.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1400" y="-1073.2" font-family="Roboto" font-size="8.00" fill="#7b7b7b">last_updated</text>
-<text text-anchor="start" x="1440.4344" y="-1073.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1468.7848" y="-1073.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1480.7848" y="-1073.2" font-family="Roboto" font-size="8.00" fill="#7b7b7b">DateTimeField</text>
-<text text-anchor="start" x="1529.2152" y="-1073.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1388" y="-1060.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1400" y="-1060.2" font-family="Roboto" font-size="8.00" fill="#000000">plan_data</text>
-<text text-anchor="start" x="1431.1" y="-1060.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1469" y="-1060.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1481" y="-1060.2" font-family="Roboto" font-size="8.00" fill="#000000">TextField</text>
-<text text-anchor="start" x="1512.1064" y="-1060.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1387.8396" y="-1047.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1399.8396" y="-1047.2" font-family="Roboto" font-size="8.00" fill="#000000">plan_description</text>
-<text text-anchor="start" x="1453.1604" y="-1047.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1469" y="-1047.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1481" y="-1047.2" font-family="Roboto" font-size="8.00" fill="#000000">TextField</text>
-<text text-anchor="start" x="1512.1064" y="-1047.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1388" y="-1034.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1400" y="-1034.2" font-family="Roboto" font-size="8.00" fill="#000000">plan_name</text>
-<text text-anchor="start" x="1435.1" y="-1034.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1469" y="-1034.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1481" y="-1034.2" font-family="Roboto" font-size="8.00" fill="#000000">CharField</text>
-<text text-anchor="start" x="1512.9944" y="-1034.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1388" y="-1021.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1400" y="-1021.2" font-family="Roboto" font-size="8.00" fill="#000000">type_id</text>
-<text text-anchor="start" x="1423.9976" y="-1021.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1469" y="-1021.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="1481" y="-1021.2" font-family="Roboto" font-size="8.00" fill="#000000">IntegerField</text>
-<text text-anchor="start" x="1520.0968" y="-1021.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<polygon fill="none" stroke="#000000" points="1384.5,-1015.9 1384.5,-1130.9 1543.5,-1130.9 1543.5,-1015.9 1384.5,-1015.9"/>
+<polygon fill="#ffffff" stroke="transparent" points="1384.5,-1009.4 1384.5,-1137.4 1543.5,-1137.4 1543.5,-1009.4 1384.5,-1009.4"/>
+<polygon fill="#1b563f" stroke="transparent" points="1386,-1114.4 1386,-1136.4 1543,-1136.4 1543,-1114.4 1386,-1114.4"/>
+<text text-anchor="start" x="1421.8375" y="-1123.4" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1433.8375" y="-1123.4" font-family="Roboto" font-weight="bold" font-size="10.00" fill="#ffffff">      plan_types      </text>
+<text text-anchor="start" x="1388" y="-1106.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1400" y="-1106.2" font-family="Roboto" font-weight="bold" font-size="8.00" fill="#000000">id</text>
+<text text-anchor="start" x="1406.2232" y="-1106.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1469" y="-1106.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1481" y="-1106.2" font-family="Roboto" font-weight="bold" font-size="8.00" fill="#000000">AutoField</text>
+<text text-anchor="start" x="1513.4432" y="-1106.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1388" y="-1093.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1400" y="-1093.2" font-family="Roboto" font-size="8.00" fill="#7b7b7b">created</text>
+<text text-anchor="start" x="1423.0912" y="-1093.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1468.7848" y="-1093.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1480.7848" y="-1093.2" font-family="Roboto" font-size="8.00" fill="#7b7b7b">DateTimeField</text>
+<text text-anchor="start" x="1529.2152" y="-1093.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1388" y="-1080.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1400" y="-1080.2" font-family="Roboto" font-size="8.00" fill="#7b7b7b">last_updated</text>
+<text text-anchor="start" x="1440.4344" y="-1080.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1468.7848" y="-1080.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1480.7848" y="-1080.2" font-family="Roboto" font-size="8.00" fill="#7b7b7b">DateTimeField</text>
+<text text-anchor="start" x="1529.2152" y="-1080.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1388" y="-1067.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1400" y="-1067.2" font-family="Roboto" font-size="8.00" fill="#000000">plan_data</text>
+<text text-anchor="start" x="1431.1" y="-1067.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1469" y="-1067.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1481" y="-1067.2" font-family="Roboto" font-size="8.00" fill="#000000">TextField</text>
+<text text-anchor="start" x="1512.1064" y="-1067.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1387.8396" y="-1054.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1399.8396" y="-1054.2" font-family="Roboto" font-size="8.00" fill="#000000">plan_description</text>
+<text text-anchor="start" x="1453.1604" y="-1054.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1469" y="-1054.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1481" y="-1054.2" font-family="Roboto" font-size="8.00" fill="#000000">TextField</text>
+<text text-anchor="start" x="1512.1064" y="-1054.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1388" y="-1041.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1400" y="-1041.2" font-family="Roboto" font-size="8.00" fill="#000000">plan_name</text>
+<text text-anchor="start" x="1435.1" y="-1041.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1469" y="-1041.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1481" y="-1041.2" font-family="Roboto" font-size="8.00" fill="#000000">CharField</text>
+<text text-anchor="start" x="1512.9944" y="-1041.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1388" y="-1028.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1400" y="-1028.2" font-family="Roboto" font-size="8.00" fill="#000000">risk_level</text>
+<text text-anchor="start" x="1431.5464" y="-1028.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1469" y="-1028.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1481" y="-1028.2" font-family="Roboto" font-size="8.00" fill="#000000">IntegerField</text>
+<text text-anchor="start" x="1520.0968" y="-1028.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1388" y="-1015.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1400" y="-1015.2" font-family="Roboto" font-size="8.00" fill="#000000">type_id</text>
+<text text-anchor="start" x="1423.9976" y="-1015.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1469" y="-1015.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="1481" y="-1015.2" font-family="Roboto" font-size="8.00" fill="#000000">IntegerField</text>
+<text text-anchor="start" x="1520.0968" y="-1015.2" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<polygon fill="none" stroke="#000000" points="1384.5,-1009.4 1384.5,-1137.4 1543.5,-1137.4 1543.5,-1009.4 1384.5,-1009.4"/>
 </g>
 <!-- app_models_plan_types&#45;&gt;app_models_fund_type -->
 <g id="edge18" class="edge">
 <title>app_models_plan_types-&gt;app_models_fund_type</title>
-<path fill="none" stroke="#000000" d="M1413.2577,-1005.0954C1396.4058,-980.8938 1378.2491,-953.0458 1363.7016,-926.4 1316.0926,-839.1974 1273.7129,-731.497 1249.9926,-667.1289"/>
-<ellipse fill="#000000" stroke="#000000" cx="1415.6761" cy="-1008.5454" rx="4" ry="4"/>
+<path fill="none" stroke="#000000" d="M1408.8004,-998.6518C1393.2511,-976.022 1376.9742,-950.7106 1363.7016,-926.4 1316.0926,-839.1974 1273.7129,-731.497 1249.9926,-667.1289"/>
+<ellipse fill="#000000" stroke="#000000" cx="1411.1044" cy="-1001.982" rx="4" ry="4"/>
 <ellipse fill="#000000" stroke="#000000" cx="1248.5709" cy="-663.2535" rx="4" ry="4"/>
 <text text-anchor="middle" x="1415.6492" y="-820" font-family="Roboto" font-size="8.00" fill="#000000"> related_fund_types (plan_types)</text>
 </g>
 <!-- app_models_plan_types&#45;&gt;app_models_insurance_type -->
 <g id="edge19" class="edge">
 <title>app_models_plan_types-&gt;app_models_insurance_type</title>
-<path fill="none" stroke="#000000" d="M1468.692,-1003.383C1474.8455,-911.5574 1485.5238,-752.2088 1491.1991,-667.5193"/>
-<ellipse fill="#000000" stroke="#000000" cx="1468.4161" cy="-1007.5007" rx="4" ry="4"/>
-<ellipse fill="#000000" stroke="#000000" cx="1491.4816" cy="-663.3035" rx="4" ry="4"/>
+<path fill="none" stroke="#000000" d="M1469.1239,-996.9389C1475.3345,-904.2604 1485.6552,-750.2486 1491.1997,-667.5099"/>
+<ellipse fill="#000000" stroke="#000000" cx="1468.8417" cy="-1001.1507" rx="4" ry="4"/>
+<ellipse fill="#000000" stroke="#000000" cx="1491.4699" cy="-663.4775" rx="4" ry="4"/>
 <text text-anchor="middle" x="1545.6432" y="-820" font-family="Roboto" font-size="8.00" fill="#000000"> related_insurance_types (plan_types)</text>
 </g>
 <!-- app_models_dataset -->
