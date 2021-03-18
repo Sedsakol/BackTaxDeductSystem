@@ -244,6 +244,7 @@ class plan_types(models.Model):
     plan_description = models.TextField()
     related_fund_types = models.ManyToManyField(fund_type)
     related_insurance_types = models.ManyToManyField(insurance_type)
+    risk_level = models.IntegerField(default=8)
     plan_data = models.TextField(null=False,blank=False)
 
     created = models.DateTimeField(auto_now_add=True, editable=False)

@@ -6836,12 +6836,14 @@ class user_tax_predict(View):
                     "ลงทุน RMF" : 50
                 }
             ]
+            risk_level_list = [8,8,8]
             for i in range(0,3):
                 pts = plan_types()
                 pts.type_id = i+1
                 pts.plan_name = plan_name[i]
                 pts.plan_description = plan_description[i]
                 pts.plan_data = str(json.dumps(plan_data[i], ensure_ascii=False))
+                pts.risk_level = risk_level_list[i]
                 pts.save()
             pts = plan_types.objects.all().order_by('created')
         
