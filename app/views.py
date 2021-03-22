@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.core import serializers
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
@@ -6877,7 +6878,7 @@ class user_tax_predict(View):
             mp = member_profile.objects.get(user = u)
             
             #ml part
-            user_plan_type = 1
+            user_plan_type = 2
             try:
                 ml_config = MLConfiguration.get_solo()
                 categories_version = ml_config.categories_version
@@ -6885,7 +6886,7 @@ class user_tax_predict(View):
 
                 today = date.today()
                 age = today.year - mp.birthdate.year - ((today.month, today.day) < (mp.birthdate.month, mp.birthdate.day))
-                fc = facebook_categories.objects.filter(facebook_id=content.get('facebook_id'), categories_version=categories_version).order_by('-created').first()
+                fc = facebook_categories.objects.filter(facebook_id=content.get('facebook_id'), categories_version=categories_version).order_by('-created').first().data
 
                 clf = joblib.load(filename)
                 data = [{
@@ -6906,38 +6907,44 @@ class user_tax_predict(View):
                 user_plan_type = clf.predict(df)[0]
                 print(f'user_plan_type : {user_plan_type}')
 
-            #     predict_data = predict_dataset()
-            #     predict_data.facebook_id = mp.facebook_id
-            #     predict_data.gender = mp.gender
-            #     predict_data.age = age
-            #     predict_data.salary = mp.salary
-            #     predict_data.other_income = mp.other_income
-            #     predict_data.parent_num = mp.parent_num
-            #     predict_data.child_num = mp.child_num
-            #     predict_data.marriage = mp.marriage
-            #     predict_data.infirm = mp.infirm
-            #     predict_data.risk_question =  mp.risk
-            #     predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
-            #     predict_data.categories_version = categories_version
-            #     predict_data.categories_data = fc.data
-            #     predict_data.predict_ans_type = user_plan_type
-            #     predict_data.save()
+                #     predict_data = predict_dataset()
+                #     predict_data.facebook_id = mp.facebook_id
+                #     predict_data.gender = mp.gender
+                #     predict_data.age = age
+                #     predict_data.salary = mp.salary
+                #     predict_data.other_income = mp.other_income
+                #     predict_data.parent_num = mp.parent_num
+                #     predict_data.child_num = mp.child_num
+                #     predict_data.marriage = mp.marriage
+                #     predict_data.infirm = mp.infirm
+                #     predict_data.risk_question =  mp.risk
+                #     predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
+                #     predict_data.categories_version = categories_version
+                #     predict_data.categories_data = fc.data
+                #     predict_data.predict_ans_type = user_plan_type
+                #     predict_data.save()
                 
             except:
                 print('load model fail.')
 
             #ดึงข้อมูลใน database
+            planType = plan_types.objects.filter(type_id=user_plan_type).first()
             user_accept_risk_lv = cal_risk_level(mp.risk)
-            fundList = fund_list.objects.filter(active=True, risk__lte=user_accept_risk_lv).order_by('-is_ads','-priority')
-            insuranceList = insurance_list.objects.filter(active=True).order_by('-is_ads','-priority')
-            #ทำ serializers
+            fundList = fund_list.objects.filter(active=True, risk__lte=user_accept_risk_lv, fundType=planType.related_fund_types.all()).order_by('-is_ads','-priority')
+            insuranceList = insurance_list.objects.filter(active=True, insuranceType__in=planType.related_insurance_types.all()).order_by('-is_ads','-priority')
 
-            fundList = []
-            insuranceList = []
+            #ทำ serializers
+            fundList_json = serializers.serialize('json', fundList)
+            print(fundList_json)
+
+            insuranceList_json = serializers.serialize('json', insuranceList)
+            print(insuranceList_json)
+            
+
             #debug for heroku
             sys.stdout.flush()
 
-            return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type, 'fund_list': fundList, 'insurance_list': insuranceList})
+            return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type, 'fund_list': fundList_json, 'insurance_list': insuranceList_json})
 
 def cal_risk(risk):
     riskarr = json.loads(risk)
@@ -7057,7 +7064,6 @@ def preprocess_data_to_ml(data):
     for i in df['risk_question']:
         x = json.loads(i)
         temp_list.append(x)
-    temp_list 
     df['risk_question'] = temp_list 
 
     for i in range(1,11):
@@ -7072,8 +7078,8 @@ def preprocess_data_to_ml(data):
                 temp_list.append(0)
         df[f'risk_question_4_{i}'] = temp_list
         
-    df['gender'] = df['gender'] - 1
-    df['marriage'] = df['marriage'] - 1
+    df['gender'] = int(df['gender']) - 1
+    df['marriage'] = int(df['marriage']) - 1
 
     for i in range(1,11):
         if i != 4:
@@ -7107,11 +7113,12 @@ def preprocess_data_to_ml(data):
             df[f'risk_question_{i}_3'] = temp_list_3
             df[f'risk_question_{i}_4'] = temp_list_4
 
-    temp_list = []
-    for i in df['categories_data']:
-        x = json.loads(i.replace("'", '"')) 
-        temp_list.append(x)
-    df['categories_data'] = temp_list
+    # temp_list = []
+    # for i in df['categories_data']:
+    #     print(i)
+    #     x = json.loads(i.replace("'", '"')) 
+    #     temp_list.append(x)
+    # df['categories_data'] = temp_list
 
     key_list = []
     for key in df['categories_data'][0].keys():
@@ -7129,7 +7136,7 @@ def preprocess_data_to_ml(data):
         drop_list.append(f'risk_question_{i}')
     
     ml_config = MLConfiguration.get_solo()
-    drop_list_2 = ml_config.drop_features
+    drop_list_2 = json.loads(ml_config.drop_features.replace("'",'"'))
     drop_list.extend(drop_list_2)
     df.drop(drop_list, axis=1, inplace=True)
 
