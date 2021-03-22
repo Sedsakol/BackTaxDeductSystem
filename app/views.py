@@ -8,7 +8,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from .models import member_profile,User,stair_step,facebook_categories,plan_types,dataset,MLConfiguration,predict_dataset
+from .models import member_profile,User,stair_step,facebook_categories,plan_types,dataset,MLConfiguration,predict_dataset,fund_list,fund_type,insurance_list,insurance_type
 import jwt
 from datetime import date,datetime
 from django.http import HttpResponse
@@ -6906,36 +6906,40 @@ class user_tax_predict(View):
                 user_plan_type = clf.predict(df)[0]
                 print(f'user_plan_type : {user_plan_type}')
 
-                predict_data = predict_dataset()
-                predict_data.facebook_id = mp.facebook_id
-                predict_data.gender = mp.gender
-                predict_data.age = age
-                predict_data.salary = mp.salary
-                predict_data.other_income = mp.other_income
-                predict_data.parent_num = mp.parent_num
-                predict_data.child_num = mp.child_num
-                predict_data.marriage = mp.marriage
-                predict_data.infirm = mp.infirm
-                predict_data.risk_question =  mp.risk
-                predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
-                predict_data.categories_version = categories_version
-                predict_data.categories_data = fc.data
-                predict_data.predict_ans_type = user_plan_type
-                predict_data.save()
+            #     predict_data = predict_dataset()
+            #     predict_data.facebook_id = mp.facebook_id
+            #     predict_data.gender = mp.gender
+            #     predict_data.age = age
+            #     predict_data.salary = mp.salary
+            #     predict_data.other_income = mp.other_income
+            #     predict_data.parent_num = mp.parent_num
+            #     predict_data.child_num = mp.child_num
+            #     predict_data.marriage = mp.marriage
+            #     predict_data.infirm = mp.infirm
+            #     predict_data.risk_question =  mp.risk
+            #     predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
+            #     predict_data.categories_version = categories_version
+            #     predict_data.categories_data = fc.data
+            #     predict_data.predict_ans_type = user_plan_type
+            #     predict_data.save()
                 
             except:
                 print('load model fail.')
 
             #ดึงข้อมูลใน database
-            fund_list = []
-            insurance_list = []
+            user_accept_risk_lv = cal_risk_level(mp.risk)
+            fundList = fund_list.objects.filter(active=True, risk__lte=user_accept_risk_lv).order_by('-is_ads','-priority')
+            insuranceList = insurance_list.objects.filter(active=True).order_by('-is_ads','-priority')
+            #ทำ serializers
 
+            fundList = []
+            insuranceList = []
             #debug for heroku
             sys.stdout.flush()
 
-            return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type, 'fund_list': fund_list, 'insurance_list': insurance_list})
+            return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type, 'fund_list': fundList, 'insurance_list': insuranceList})
 
-def cal_risk_type(risk):
+def cal_risk(risk):
     riskarr = json.loads(risk)
     score = 0
     result = 0
@@ -6966,7 +6970,15 @@ def cal_risk_type(risk):
         risk_level = 8
         result = 4
 
+    return risk_level, result
+
+def cal_risk_type(risk):
+    risk_level, result = cal_risk(risk)
     return result
+
+def cal_risk_level(risk):
+    risk_level, result = cal_risk(risk)
+    return risk_level
         
 @method_decorator(csrf_exempt, name='dispatch')
 class collect_dataset(View):
