@@ -9,7 +9,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
-from .models import member_profile,User,stair_step,facebook_categories,plan_types,dataset,MLConfiguration,predict_dataset,fund_list,fund_type,insurance_list,insurance_type
+from .models import member_profile,stair_step,facebook_categories,plan_types,dataset,MLConfiguration,predict_dataset,fund_list,fund_type,insurance_list,insurance_type
 import jwt
 from datetime import date,datetime
 from django.http import HttpResponse
@@ -20,7 +20,7 @@ import requests
 import joblib
 import pandas as pd
 
-
+User = get_user_model()
 # Create your views here.
 @method_decorator(csrf_exempt, name='dispatch')
 class cal_tax(View):
@@ -213,11 +213,8 @@ class user_register(View):
     def post(self, request, *args, **kwargs):
         content = json.loads(request.body)
         if "username" in content and "password" in content :
-            email_list = User.objects.all().values_list('email', flat=True)
-            if content["username"] not in email_list:
-                user = User.objects.create(email=content["username"],password=content["password"])
-                mp = member_profile.objects.create(user=user)
-                
+            if not User.objects.filter(email=content["username"]).exists():
+                user = User.objects.create_member(email=content["username"],password=content["password"])
                 return JsonResponse({'msg':'created user'})
             else:
                 return JsonResponse({'msg':'email is already'})
