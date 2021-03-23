@@ -216,7 +216,6 @@ class user_register(View):
             email_list = User.objects.all().values_list('email', flat=True)
             if content["username"] not in email_list:
                 user = User.objects.create_member(email=content["username"],password=content["password"])
-                user.save()
                 return JsonResponse({'msg':'created user'})
             else:
                 return JsonResponse({'msg':'email is already'})
