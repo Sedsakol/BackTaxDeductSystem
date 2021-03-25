@@ -6929,39 +6929,39 @@ class user_tax_predict(View):
             user_accept_risk_lv = cal_risk_level(mp.risk)
             fundList = fund_list.objects.filter(active=True, risk__lte=user_accept_risk_lv, fundType=planType.related_fund_types.all()).order_by('-is_ads','-priority')
             fundList_json = []
-            for fund in fundList:
-                fund_json = {
-                    'name':  fund.name,
-                    'display_name':  fund.display_name,
-                    'description ':  fund.description,
-                    'start_date': fund.start_date,
-                    'end_date': fund.end_date,
-                    'risk': fund.risk,
-                    'dividend_payout': fund.dividend_payout,
-                    'asset_management':  fund.asset_management,
-                    'link':  fund.link,
-                    # 'fundType':  fund.fundType.all(),
-                    'priority':  fund.priority,
-                    'is_ads': fund.is_ads  
-                }
-                fundList_json.append(fund_json)
-            print(fundList_json)
+            # for fund in fundList:
+            #     fund_json = {
+            #         'name':  fund.name,
+            #         'display_name':  fund.display_name,
+            #         'description ':  fund.description,
+            #         'start_date': fund.start_date,
+            #         'end_date': fund.end_date,
+            #         'risk': fund.risk,
+            #         'dividend_payout': fund.dividend_payout,
+            #         'asset_management':  fund.asset_management,
+            #         'link':  fund.link,
+            #         # 'fundType':  fund.fundType.all(),
+            #         'priority':  fund.priority,
+            #         'is_ads': fund.is_ads  
+            #     }
+            #     fundList_json.append(fund_json)
+            # print(fundList_json)
 
             insuranceList = insurance_list.objects.filter(active=True, insuranceType__in=planType.related_insurance_types.all()).order_by('-is_ads','-priority')
             insuranceList_json = []
-            for insurance in insuranceList:
-                insurance_json = {
-                    'name':  insurance.name,
-                    'display_name':  insurance.display_name,
-                    'description ':  insurance.description,
-                    'public_limited_company':  insurance.public_limited_company,
-                    'link':  insurance.link,
-                    # 'insuranceType':  insurance.insuranceType.all(),
-                    'priority':  insurance.priority,
-                    'is_ads': insurance.is_ads  
-                }
-                insuranceList_json.append(insurance_json)
-            print(insuranceList_json)
+            # for insurance in insuranceList:
+            #     insurance_json = {
+            #         'name':  insurance.name,
+            #         'display_name':  insurance.display_name,
+            #         'description ':  insurance.description,
+            #         'public_limited_company':  insurance.public_limited_company,
+            #         'link':  insurance.link,
+            #         # 'insuranceType':  insurance.insuranceType.all(),
+            #         'priority':  insurance.priority,
+            #         'is_ads': insurance.is_ads  
+            #     }
+            #     insuranceList_json.append(insurance_json)
+            # print(insuranceList_json)
             
             #debug for heroku
             sys.stdout.flush()
