@@ -6877,7 +6877,7 @@ class user_tax_predict(View):
             mp = member_profile.objects.get(user = u)
             
             #ml part
-            user_plan_type = 2
+            user_plan_type = 1
             try:
                 ml_config = MLConfiguration.get_solo()
                 categories_version = ml_config.categories_version
@@ -6885,7 +6885,7 @@ class user_tax_predict(View):
 
                 today = date.today()
                 age = today.year - mp.birthdate.year - ((today.month, today.day) < (mp.birthdate.month, mp.birthdate.day))
-                fc = facebook_categories.objects.filter(facebook_id=content.get('facebook_id'), categories_version=categories_version).order_by('-created').first().data
+                fc = facebook_categories.objects.filter(facebook_id=content.get('facebook_id'), categories_version=categories_version).order_by('-created').first()
 
                 clf = joblib.load(filename)
                 data = [{
@@ -6899,32 +6899,36 @@ class user_tax_predict(View):
                         'infirm' : mp.infirm,
                         'risk_question' : mp.risk,
                         'risk_type' : cal_risk_type(mp.risk),
-                        'categories_data' : fc
+                        'categories_data' : fc.data
                     }]
 
                 df = preprocess_data_to_ml(data)
                 user_plan_type = clf.predict(df)[0]
                 print(f'email: {email}, user_plan_type : {user_plan_type}')
 
-                # predict_data = predict_dataset()
-                # predict_data.facebook_id = mp.facebook_id
-                # predict_data.gender = mp.gender
-                # predict_data.age = age
-                # predict_data.salary = mp.salary
-                # predict_data.other_income = mp.other_income
-                # predict_data.parent_num = mp.parent_num
-                # predict_data.child_num = mp.child_num
-                # predict_data.marriage = mp.marriage
-                # predict_data.infirm = mp.infirm
-                # predict_data.risk_question =  mp.risk
-                # predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
-                # predict_data.categories_version = categories_version
-                # predict_data.categories_data = fc.data
-                # predict_data.predict_ans_type = user_plan_type
-                # predict_data.save()
-                
             except:
                 print('load model fail.')
+
+            try:
+                predict_data = predict_dataset()
+                predict_data.facebook_id = mp.facebook_id
+                predict_data.gender = mp.gender
+                predict_data.age = age
+                predict_data.salary = mp.salary
+                predict_data.other_income = mp.other_income
+                predict_data.parent_num = mp.parent_num
+                predict_data.child_num = mp.child_num
+                predict_data.marriage = mp.marriage
+                predict_data.infirm = mp.infirm
+                predict_data.risk_question =  mp.risk
+                predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
+                predict_data.categories_version = categories_version
+                predict_data.categories_data = fc.data
+                predict_data.predict_ans_type = int(user_plan_type)
+                predict_data.save()
+                print('save predict result complete.')
+            except:
+                print('save predict result fail.')
 
             planType = plan_types.objects.filter(type_id=user_plan_type).first()
             user_accept_risk_lv = cal_risk_level(mp.risk)
