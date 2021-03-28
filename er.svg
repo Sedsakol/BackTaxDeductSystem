@@ -417,8 +417,17 @@
 <text text-anchor="middle" x="2547.7688" y="-1075.8" font-family="Roboto" font-size="8.00" fill="#000000"> proxy</text>
 <text text-anchor="middle" x="2547.7688" y="-1066.2" font-family="Roboto" font-size="8.00" fill="#000000">inheritance</text>
 </g>
-<!-- django_contrib_auth_base_user_AbstractBaseUser -->
+<!-- solo_models_SingletonModel -->
 <g id="node9" class="node">
+<title>solo_models_SingletonModel</title>
+<polygon fill="#ffffff" stroke="transparent" points="415,-598.8 415,-622.8 533,-622.8 533,-598.8 415,-598.8"/>
+<polygon fill="#1b563f" stroke="transparent" points="416,-599.8 416,-621.8 532,-621.8 532,-599.8 416,-599.8"/>
+<text text-anchor="start" x="420.779" y="-608.8" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
+<text text-anchor="start" x="432.779" y="-608.8" font-family="Roboto" font-weight="bold" font-size="10.00" fill="#ffffff">      SingletonModel      </text>
+<polygon fill="none" stroke="#000000" points="415,-598.8 415,-622.8 533,-622.8 533,-598.8 415,-598.8"/>
+</g>
+<!-- django_contrib_auth_base_user_AbstractBaseUser -->
+<g id="node10" class="node">
 <title>django_contrib_auth_base_user_AbstractBaseUser</title>
 <polygon fill="#ffffff" stroke="transparent" points="1671.5,-283.6 1671.5,-333.6 1808.5,-333.6 1808.5,-283.6 1671.5,-283.6"/>
 <polygon fill="#1b563f" stroke="transparent" points="1673,-310.6 1673,-332.6 1808,-332.6 1808,-310.6 1673,-310.6"/>
@@ -439,7 +448,7 @@
 <polygon fill="none" stroke="#000000" points="1671.5,-283.6 1671.5,-333.6 1808.5,-333.6 1808.5,-283.6 1671.5,-283.6"/>
 </g>
 <!-- django_contrib_auth_models_PermissionsMixin -->
-<g id="node10" class="node">
+<g id="node11" class="node">
 <title>django_contrib_auth_models_PermissionsMixin</title>
 <polygon fill="#ffffff" stroke="transparent" points="1843,-290.1 1843,-327.1 1983,-327.1 1983,-290.1 1843,-290.1"/>
 <polygon fill="#1b563f" stroke="transparent" points="1844,-303.6 1844,-325.6 1982,-325.6 1982,-303.6 1844,-303.6"/>
@@ -452,15 +461,6 @@
 <text text-anchor="start" x="1924.9472" y="-295.4" font-family="Roboto" font-size="8.00" fill="#000000">BooleanField</text>
 <text text-anchor="start" x="1968.0528" y="-295.4" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
 <polygon fill="none" stroke="#000000" points="1843,-290.1 1843,-327.1 1983,-327.1 1983,-290.1 1843,-290.1"/>
-</g>
-<!-- solo_models_SingletonModel -->
-<g id="node11" class="node">
-<title>solo_models_SingletonModel</title>
-<polygon fill="#ffffff" stroke="transparent" points="415,-598.8 415,-622.8 533,-622.8 533,-598.8 415,-598.8"/>
-<polygon fill="#1b563f" stroke="transparent" points="416,-599.8 416,-621.8 532,-621.8 532,-599.8 416,-599.8"/>
-<text text-anchor="start" x="420.779" y="-608.8" font-family="Roboto" font-size="8.00" fill="#000000">      </text>
-<text text-anchor="start" x="432.779" y="-608.8" font-family="Roboto" font-weight="bold" font-size="10.00" fill="#ffffff">      SingletonModel      </text>
-<polygon fill="none" stroke="#000000" points="415,-598.8 415,-622.8 533,-622.8 533,-598.8 415,-598.8"/>
 </g>
 <!-- app_models_User&#45;&gt;django_contrib_auth_models_Permission -->
 <g id="edge9" class="edge">
