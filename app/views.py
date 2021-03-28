@@ -6938,7 +6938,7 @@ class user_tax_predict(View):
             for fund in fundList:
                 fund_json = {
                     'name':  fund.name,
-                    'description ':  fund.description,
+                    'description':  fund.description,
                     'start_date': fund.start_date.strftime("%m/%d/%Y, %H:%M:%S") if fund.start_date else fund.start_date,
                     'end_date': fund.end_date.strftime("%m/%d/%Y, %H:%M:%S") if fund.end_date else fund.end_date,
                     'risk': fund.risk,
@@ -6957,7 +6957,7 @@ class user_tax_predict(View):
                 insurance_json = {
                     'name':  insurance.name,
                     'display_name':  insurance.display_name,
-                    'description ':  insurance.description,
+                    'description':  insurance.description,
                     'public_limited_company':  insurance.public_limited_company,
                     'link':  insurance.link,
                     'insuranceType': list(insurance.insuranceType.all().values('name', 'description')),
