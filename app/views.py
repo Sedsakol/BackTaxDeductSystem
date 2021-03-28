@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core import serializers
+from django.core.serializers.json import DjangoJSONEncoder
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import ListAPIView
@@ -6903,70 +6904,67 @@ class user_tax_predict(View):
 
                 df = preprocess_data_to_ml(data)
                 user_plan_type = clf.predict(df)[0]
-                print(f'user_plan_type : {user_plan_type}')
+                print(f'email: {email}, user_plan_type : {user_plan_type}')
 
-                #     predict_data = predict_dataset()
-                #     predict_data.facebook_id = mp.facebook_id
-                #     predict_data.gender = mp.gender
-                #     predict_data.age = age
-                #     predict_data.salary = mp.salary
-                #     predict_data.other_income = mp.other_income
-                #     predict_data.parent_num = mp.parent_num
-                #     predict_data.child_num = mp.child_num
-                #     predict_data.marriage = mp.marriage
-                #     predict_data.infirm = mp.infirm
-                #     predict_data.risk_question =  mp.risk
-                #     predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
-                #     predict_data.categories_version = categories_version
-                #     predict_data.categories_data = fc.data
-                #     predict_data.predict_ans_type = user_plan_type
-                #     predict_data.save()
+                # predict_data = predict_dataset()
+                # predict_data.facebook_id = mp.facebook_id
+                # predict_data.gender = mp.gender
+                # predict_data.age = age
+                # predict_data.salary = mp.salary
+                # predict_data.other_income = mp.other_income
+                # predict_data.parent_num = mp.parent_num
+                # predict_data.child_num = mp.child_num
+                # predict_data.marriage = mp.marriage
+                # predict_data.infirm = mp.infirm
+                # predict_data.risk_question =  mp.risk
+                # predict_data.risk_type = cal_risk_type(mp.risk)  #m.risk is string
+                # predict_data.categories_version = categories_version
+                # predict_data.categories_data = fc.data
+                # predict_data.predict_ans_type = user_plan_type
+                # predict_data.save()
                 
             except:
                 print('load model fail.')
 
             planType = plan_types.objects.filter(type_id=user_plan_type).first()
             user_accept_risk_lv = cal_risk_level(mp.risk)
-            fundList = fund_list.objects.filter(active=True, risk__lte=user_accept_risk_lv, fundType=planType.related_fund_types.all()).order_by('-is_ads','-priority')
+            fundList = fund_list.objects.filter(active=True, risk__lte=user_accept_risk_lv, fundType__in=list(planType.related_fund_types.all())).distinct().order_by('-is_ads','-priority')
             fundList_json = []
-            # for fund in fundList:
-            #     fund_json = {
-            #         'name':  fund.name,
-            #         'display_name':  fund.display_name,
-            #         'description ':  fund.description,
-            #         'start_date': fund.start_date,
-            #         'end_date': fund.end_date,
-            #         'risk': fund.risk,
-            #         'dividend_payout': fund.dividend_payout,
-            #         'asset_management':  fund.asset_management,
-            #         'link':  fund.link,
-            #         # 'fundType':  fund.fundType.all(),
-            #         'priority':  fund.priority,
-            #         'is_ads': fund.is_ads  
-            #     }
-            #     fundList_json.append(fund_json)
-            # print(fundList_json)
 
-            insuranceList = insurance_list.objects.filter(active=True, insuranceType__in=planType.related_insurance_types.all()).order_by('-is_ads','-priority')
+            for fund in fundList:
+                fund_json = {
+                    'name':  fund.name,
+                    'description ':  fund.description,
+                    'start_date': fund.start_date.strftime("%m/%d/%Y, %H:%M:%S") if fund.start_date else fund.start_date,
+                    'end_date': fund.end_date.strftime("%m/%d/%Y, %H:%M:%S") if fund.end_date else fund.end_date,
+                    'risk': fund.risk,
+                    'dividend_payout': fund.dividend_payout,
+                    'asset_management':  fund.asset_management,
+                    'link':  fund.link,
+                    'fundType':  list(fund.fundType.all().values('name', 'description')),
+                    'priority':  fund.priority,
+                    'is_ads': fund.is_ads  
+                }
+                fundList_json.append(fund_json)
+
+            insuranceList = insurance_list.objects.filter(active=True, insuranceType__in=list(planType.related_insurance_types.all())).distinct().order_by('-is_ads','-priority')
             insuranceList_json = []
-            # for insurance in insuranceList:
-            #     insurance_json = {
-            #         'name':  insurance.name,
-            #         'display_name':  insurance.display_name,
-            #         'description ':  insurance.description,
-            #         'public_limited_company':  insurance.public_limited_company,
-            #         'link':  insurance.link,
-            #         # 'insuranceType':  insurance.insuranceType.all(),
-            #         'priority':  insurance.priority,
-            #         'is_ads': insurance.is_ads  
-            #     }
-            #     insuranceList_json.append(insurance_json)
-            # print(insuranceList_json)
+            for insurance in insuranceList:
+                insurance_json = {
+                    'name':  insurance.name,
+                    'display_name':  insurance.display_name,
+                    'description ':  insurance.description,
+                    'public_limited_company':  insurance.public_limited_company,
+                    'link':  insurance.link,
+                    'insuranceType': list(insurance.insuranceType.all().values('name', 'description')),
+                    'priority':  insurance.priority,
+                    'is_ads': insurance.is_ads  
+                }
+                insuranceList_json.append(insurance_json)
             
             #debug for heroku
             sys.stdout.flush()
-
-            return JsonResponse({'status':'200','email': email , 'user_plan_type' : user_plan_type, 'fund_list': fundList_json, 'insurance_list': insuranceList_json})
+            return JsonResponse({'status':'200','email': email , 'user_plan_type' : int(user_plan_type), 'fund_list': fundList_json, 'insurance_list': insuranceList_json})
 
 def cal_risk(risk):
     riskarr = json.loads(risk)
