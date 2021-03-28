@@ -1,5 +1,5 @@
 {
 "meta":{"test_sets":["test"],"test_metrics":[{"best_value":"Max","name":"AccuracyMetric"},{"best_value":"Min","name":"MultiClass"}],"learn_metrics":[{"best_value":"Max","name":"AccuracyMetric"},{"best_value":"Min","name":"MultiClass"}],"launch_mode":"Train","parameters":"","iteration_count":1,"learn_sets":["learn"],"name":"experiment"},
 "iterations":[
-{"learn":[0.7307692308,1.091675367],"iteration":0,"passed_time":0.006027183714,"remaining_time":0,"test":[0.75,1.094488363]}
+{"learn":[0.8571428571,1.090651559],"iteration":0,"passed_time":0.01214726828,"remaining_time":0,"test":[0.8,1.09149964]}
 ]}
