@@ -350,6 +350,7 @@ class facebook_login(View):
         else:
             return JsonResponse({'status':'400','msg':'Error Wrong Format'})
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class delete_user(View):
     permission_classes = (IsAuthenticated,)
@@ -376,6 +377,7 @@ class delete_user(View):
 
                 return JsonResponse({'status':'200','msg':"delete user complete"})
         return JsonResponse({'status':'400','msg':'Error Wrong Format'})
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class categories(View):
@@ -6970,6 +6972,7 @@ class user_tax_predict(View):
             sys.stdout.flush()
             return JsonResponse({'status':'200','email': email , 'user_plan_type' : int(user_plan_type), 'fund_list': fundList_json, 'insurance_list': insuranceList_json})
 
+
 def cal_risk(risk):
     riskarr = json.loads(risk)
     score = 0
@@ -7067,6 +7070,7 @@ class collect_dataset(View):
                 d.save()
             
             return JsonResponse({'status':'200','msg': 'save dataset complete' })
+
 
 def preprocess_data_to_ml(data):
     # data = [{
